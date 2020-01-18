@@ -1,0 +1,25 @@
+.navigation-group {
+  top: 0;
+  background-color: #8888;
+  margin: 1rem;
+  position: fixed;
+}
+
+.navigation-element {
+  background-color: #fff;
+  border: #888 solid 1px;
+  border-radius: .5rem;
+  margin: .5rem;
+  padding: .5rem;
+}
+
+.navigation-element:hover {
+  /* background-color: #aaa; */
+  box-shadow: 0 0 2px #888;
+  text-shadow: 0 0 1px #888;
+}
+
+.active {
+  background-color: #888;
+  color: #fff;
+}
