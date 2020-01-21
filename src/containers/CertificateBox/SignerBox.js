@@ -33,7 +33,7 @@ export default class extends Component {
   render = () => (
     <div className={['signer-box', this.state.boxClassName].filter(className=>!!className).join(' ')}>
       <p>Signer {this.props.serial}: {this.state.name ? <>{this.state.name}({this.props.signer.slice(0,6)}...{this.props.signer.slice(38)})</> : <>{this.props.signer}</>}</p>
-      <p>Signature: {this.props.signature.slice(0,15)}...{this.props.signature.slice(115)}</p>
+      <p>Signature: {this.props.signature.slice(0,10)}...{this.props.signature.slice(122)}</p>
     </div>
   );
 }

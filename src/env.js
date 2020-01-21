@@ -8,4 +8,11 @@ const certificateContract = {
   abi: certificateStorageJSON.abi
 };
 
-module.exports = { network, certificateContract, managerAddress };
+const TX_STATUS_ENUM = {
+  NOT_INITIATED: 0,
+  SIGNING: 1,
+  WAITING_FOR_CONFIRMATION: 2,
+  CONFIRMED: 3
+}
+
+module.exports = { network, certificateContract, managerAddress, TX_STATUS_ENUM };

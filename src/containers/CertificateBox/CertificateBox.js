@@ -20,6 +20,7 @@ export default class extends Component {
   render = () => (
     <div className="certificate-box">
     {console.log(this.state.validCertificate, this.props.certificateObj.signatures.length)}
+      <p className="hash">Hash: {this.props.certificateObj.certificateHash}</p>
       <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>
       <p><span className="course">{this.props.certificateObj.parsedCertificate.course}</span>
       {this.props.certificateObj.parsedCertificate.score
