@@ -2,15 +2,6 @@ import React, { Component } from 'react';
 
 const ethers = require('ethers');
 
-function stringToBytes32(text) {
-  // text = text.slice(0,32);
-  if(text.length >= 32) throw new Error('only 32 chars allowed in bytes32');
-  var result = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(text));
-  while (result.length < 66) { result += '0'; }
-  if (result.length !== 66) { throw new Error("invalid web3 implicit bytes32"); }
-  return result;
-}
-
 export default class extends Component {
   state = {
     address: '',
@@ -23,7 +14,7 @@ export default class extends Component {
     this.setState({ errorMessage: '', statusMessage: '' })
     try {
       const address = ethers.utils.getAddress(this.state.address);
-      const nameBytes32 = stringToBytes32(this.state.name);
+      const nameBytes32 = window.stringToBytes32(this.state.name);
 
       const tx = await window.certificateContractInstance.functions.addCertifyingAuthority(
         address, nameBytes32

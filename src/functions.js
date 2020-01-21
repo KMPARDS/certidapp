@@ -32,4 +32,17 @@ const parseCertificate = certificateString => {
   return {parsedCertificate, rawCertificateDetails, signatures};
 }
 
-export { parseCertificate };
+function stringToBytes32(text) {
+  // text = text.slice(0,32);
+  if(text.length >= 32) throw new Error('only 32 chars allowed in bytes32');
+  var result = ethers.utils.hexlify(ethers.utils.toUtf8Bytes(text));
+  while (result.length < 66) { result += '0'; }
+  if (result.length !== 66) { throw new Error("invalid web3 implicit bytes32"); }
+  return result;
+}
+
+function bytesToString(bytes) {
+  return ethers.utils.toUtf8String(bytes).split('\u0000').join('');
+}
+
+export { parseCertificate, stringToBytes32, bytesToString };

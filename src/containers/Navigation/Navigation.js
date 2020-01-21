@@ -21,6 +21,7 @@ export default class extends Component {
     <div className="navigation-group">
       <NavigationElement heading="Register Certificate" />
       {this.state.isManager ? <NavigationElement heading="Add Certifier" /> : null}
+      <NavigationElement heading="List Certifiers" />
     </div>
   );
 
