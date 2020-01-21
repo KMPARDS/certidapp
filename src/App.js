@@ -4,15 +4,15 @@ import Navigation from './containers/Navigation/Navigation';
 import RegisterCertificate from './containers/RegisterCertificate/RegisterCertificate';
 import AddCertifier from './containers/AddCertifier/AddCertifier';
 import ListCertifiers from './containers/ListCertifiers/ListCertifiers';
+import SignCertificate from './containers/SignCertificate/SignCertificate';
 import './App.css';
 
 import { network } from './env';
 
 window.ethers = require('ethers');
 window.provider = window.ethers.getDefaultProvider(network);
-window.parseCertificate = require('./functions').parseCertificate;
-window.stringToBytes32 = require('./functions').stringToBytes32;
-window.bytesToString = require('./functions').bytesToString;
+window._z = require('./functions');
+
 require('./ethereum');
 // window.certificateContractInstance = require('./ethereum').certificateContractInstance;
 
@@ -29,6 +29,7 @@ const App = props => (
             <Route path="/register-certificate" exact component={RegisterCertificate} />
             <Route path="/add-certifier" exact component={AddCertifier} />
             <Route path="/list-certifiers" exact component={ListCertifiers} />
+            <Route path="/sign-certificate" exact component={SignCertificate} />
           </Switch>
         </div>
       </header>

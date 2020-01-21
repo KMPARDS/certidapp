@@ -10,7 +10,7 @@ export default class extends Component {
     try {
       const certifyingAuthority = await window.certificateContractInstance.functions.certifyingAuthorities(this.props.address);
       // console.log(certifyingAuthority);
-      const name = window.bytesToString(certifyingAuthority.name);
+      const name = window._z.bytesToString(certifyingAuthority.name);
       this.setState({ name, isAuthorised: certifyingAuthority.isAuthorised });
     } catch (error) {
       console.error(error);

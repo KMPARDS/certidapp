@@ -14,6 +14,9 @@ const parseCertificate = certificateString => {
     extraData: '0x'+rawCertificateDetails.slice(128+2,192+2)
   }
 
+  const digest = ethers.utils.hexlify(ethers.utils.concat([ethers.utils.toUtf8Bytes('\x19Ethereum Signed Message:\n96'),rawCertificateDetails]));
+  const certificateHash = ethers.utils.keccak256(digest);
+
   let i = 0; const signatures = [];
 
   while(true) {
@@ -21,7 +24,7 @@ const parseCertificate = certificateString => {
     if(signature) {
       signatures.push({
         rawSignature: '0x'+signature,
-        signer: ethers.utils.recoverAddress(rawCertificateDetails, '0x'+signature),
+        signer: ethers.utils.recoverAddress(certificateHash, '0x'+signature),
       });
     } else {
       break;
@@ -29,7 +32,7 @@ const parseCertificate = certificateString => {
     i++;
   }
 
-  return {parsedCertificate, rawCertificateDetails, signatures};
+  return {parsedCertificate, rawCertificateDetails, certificateHash, signatures};
 }
 
 function stringToBytes32(text) {
@@ -45,4 +48,33 @@ function bytesToString(bytes) {
   return ethers.utils.toUtf8String(bytes).split('\u0000').join('');
 }
 
-export { parseCertificate, stringToBytes32, bytesToString };
+function encodeQualification(courseName, percentile=0) {
+  if(courseName.length >= 30) throw new Error('only 30 chars allowed as courseName');
+  const courseNameHex = stringToBytes32(courseName).slice(0,62);
+
+  // 2 byte percentile can display upto 2 decimal accuracy
+  const percentileMul100Hex = ethers.utils.hexlify(Math.floor(percentile*100));
+  // console.log({courseNameHex,percentileMul100Hex});
+
+  return ethers.utils.hexlify(ethers.utils.concat([courseNameHex, percentileMul100Hex]));
+}
+
+function decodeQualification(qualification) {
+  if(qualification.slice(0,2) !== '0x') throw new Error('hex string should start with 0x');
+  // qualification = qualification.slice(2);
+  const courseName = bytesToString(qualification.slice(0,62));
+  const percentile = (+('0x'+qualification.slice(62,66)))/100;
+  return {courseName, percentile};
+}
+
+function parsePackedAddress(packedAddresses) {
+  if(packedAddresses.slice(0,2).toLowerCase() === '0x') packedAddresses = packedAddresses.slice(2);
+  if(packedAddresses.length%40 !== 0) throw new Error('Invalid packed addresses');
+  const addressArray = [];
+  for(let i = 0; i < packedAddresses.length/40; i++) {
+    addressArray.push('0x'+packedAddresses.slice(0+40*i,40+40*i));
+  }
+  return addressArray;
+}
+
+export { parseCertificate, stringToBytes32, bytesToString, encodeQualification, decodeQualification, parsePackedAddress };

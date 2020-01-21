@@ -11,6 +11,9 @@
   border-radius: .5rem;
   margin: .5rem;
   padding: .5rem;
+  font-size: 1rem;
+  font-family: 'Share Tech Mono', monospace;
+  outline: none;
 }
 
 .navigation-element:hover {

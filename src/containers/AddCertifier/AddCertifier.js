@@ -14,7 +14,7 @@ export default class extends Component {
     this.setState({ errorMessage: '', statusMessage: '' })
     try {
       const address = ethers.utils.getAddress(this.state.address);
-      const nameBytes32 = window.stringToBytes32(this.state.name);
+      const nameBytes32 = window._z.stringToBytes32(this.state.name);
 
       const tx = await window.certificateContractInstance.functions.addCertifyingAuthority(
         address, nameBytes32
@@ -47,7 +47,7 @@ export default class extends Component {
           className="certificate-textinput"
           type="text"
           placeholder="New Certifier Name"
-          maxlength="32"
+          maxLength="32"
           onChange={event => this.setState({name: event.target.value})}/>
       </div>
 

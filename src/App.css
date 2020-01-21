@@ -51,6 +51,8 @@
   width: 95%;
   height: 40vh;
   border-radius: .2rem;
+  font-size: 1.3rem;
+  font-family: 'Share Tech Mono', monospace;
 }
 
 .certificate-textarea.valid {

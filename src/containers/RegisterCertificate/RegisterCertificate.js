@@ -14,9 +14,9 @@ export default class extends Component {
 
   onUserEnter = event => {
     const spacesRemoved = event.target.value.split(' ').join('').split('\n').join('');
-    console.log(spacesRemoved);
+    // console.log(spacesRemoved);
     try {
-      const certificateObj = window.parseCertificate(spacesRemoved);
+      const certificateObj = window._z.parseCertificate(spacesRemoved);
 
       this.setState({
         textAreaClass: 'valid',

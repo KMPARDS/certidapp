@@ -21,9 +21,12 @@ export default class extends Component {
     });
 
     console.log('found', certifyingAuthority.isAuthorised);
-    if(this.props.validCertificate[0] !== false) {
-      console.log('i marked it', certifyingAuthority.isAuthorised);
-      this.props.validCertificate[1](certifyingAuthority.isAuthorised);
+    // if(this.props.validCertificate[0] !== false) {
+    //   console.log('i marked it', certifyingAuthority.isAuthorised);
+    //   this.props.validCertificate[1](certifyingAuthority.isAuthorised);
+    // }
+    if(certifyingAuthority.isAuthorised) {
+      this.props.validCertificate[1]((this.props.validCertificate[0] || 0)+1);
     }
   };
 

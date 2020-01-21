@@ -19,7 +19,7 @@ export default class extends Component {
     });
     // console.log(logs);
     this.setState({
-      certifiers: logs.map(log => ethers.utils.hexZeroPad(ethers.utils.hexStripZeros(log.topics[1]), 20)),
+      certifiers: logs.map(log => ethers.utils.hexZeroPad(ethers.utils.hexStripZeros(log.topics[1]), 20)).filter((address, i, self) => self.indexOf(address) === i),
       loading: false
     });
   }
