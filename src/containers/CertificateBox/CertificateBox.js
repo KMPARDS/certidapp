@@ -20,6 +20,7 @@ export default class extends Component {
       ? <>
         {this.props.certificateObj.signatures.map((entry, i) => (
           <SignerBox
+            key={'signer-'+i}
             serial={i+1}
             signer={entry.signer}
             signature={entry.rawSignature}

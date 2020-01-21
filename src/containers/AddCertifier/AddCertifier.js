@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import CertificateBox from '../CertificateBox/CertificateBox';
-import { network, certificateContract } from '../../env';
 
 const ethers = require('ethers');
 

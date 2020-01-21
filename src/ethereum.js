@@ -1,5 +1,5 @@
 const ethers = require('ethers');
-const { certificateContract, network } = require('./env');
+const { certificateContract } = require('./env');
 
 window.ethereum.enable().then(() => {
   console.log(window.web3.currentProvider);
