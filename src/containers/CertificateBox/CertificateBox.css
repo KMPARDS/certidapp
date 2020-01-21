@@ -1,0 +1,34 @@
+.certificate-box {
+  border: 1px solid black;
+  box-shadow: 1px 1px 1px #eeeeee;
+  margin: 2rem auto;
+  padding: 1rem;
+  display: block;
+  /* width: 95%; */
+}
+
+.certificate-box .name {
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.certificate-box .score {
+  font-weight: bold;
+}
+
+.certificate-box .signer-box {
+  /* max-width: 80%; */
+  background-color: #0002;
+  padding: 1rem;
+  margin: 1rem;
+}
+
+.certificate-box .signer-box.valid {
+  /* max-width: 80%; */
+  background-color: #00994450;
+}
+
+.certificate-box .signer-box.invalid {
+  /* max-width: 80%; */
+  background-color: #CF000f50;
+}

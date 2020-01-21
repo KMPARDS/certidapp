@@ -21,3 +21,82 @@
 .App-link {
   color: #09d3ac;
 }
+
+.container {
+  width:80vw;
+  max-width: 1024px;
+  margin-top: 50px;
+  overflow: scroll;
+}
+
+.form-group {
+  background-color: #00000015;
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: .2rem;
+  border:1px solid #cccccc;
+}
+
+.certificate-textinput {
+  width:90%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+  font-size: 1rem;
+  border:1px solid #cccccc;
+  border-radius: .2rem;
+}
+
+.certificate-textarea {
+  width: 95%;
+  height: 40vh;
+  border-radius: .2rem;
+}
+
+.certificate-textarea.valid {
+  background-color: #00994419;
+  border: 2px solid #009944;
+  box-shadow: 0 0 5px #009944;
+  outline: none;
+}
+
+.certificate-textarea.invalid {
+  background-color: #CF000f19;
+  border: 2px solid #CF000F;
+  box-shadow: 0 0 5px #CF000F;
+  outline: none;
+}
+
+.btn {
+  background-color: #63C0DF;
+  border: none;
+  color: white;
+  text-shadow: 0 0 4px #0004;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: .2rem;
+  border:1px solid #888;
+}
+
+.btn:disabled,
+.btn[disabled] {
+  background-color: #B4E1F0;
+}
+
+.error-message {
+  background-color: #CF000F44;
+  color: #CF000FDD;
+  padding: .5rem;
+  border-radius: .2rem;
+  border:1px solid #CF000FAA;
+}
+
+.status-message {
+  background-color: #00000015;
+  padding: .5rem;
+  border-radius: .2rem;
+  border:1px solid #cccccc;
+}
