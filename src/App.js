@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import Navigation from './containers/Navigation/Navigation';
 import RegisterCertificate from './containers/RegisterCertificate/RegisterCertificate';
 import AddCertifier from './containers/AddCertifier/AddCertifier';
-import ListCertifiers from './containers/ListCertifiers/ListCertifiers';
+import ListAuthorities from './containers/ListAuthorities/ListAuthorities';
 import SignCertificate from './containers/SignCertificate/SignCertificate';
 import './App.css';
 
@@ -28,7 +28,7 @@ const App = props => (
             )} />
             <Route path="/register-certificate" exact component={RegisterCertificate} />
             <Route path="/add-certifier" exact component={AddCertifier} />
-            <Route path="/list-certifiers" exact component={ListCertifiers} />
+            <Route path="/list-authorities" exact component={ListAuthorities} />
             <Route path="/sign-certificate" exact component={SignCertificate} />
           </Switch>
         </div>

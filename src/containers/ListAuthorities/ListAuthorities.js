@@ -26,7 +26,7 @@ export default class extends Component {
 
   render = () => (
     <>
-      {this.state.loading ? <>Please wait loading certifiers</> : null}
+      {this.state.loading ? <>Please wait loading certifying authorities</> : null}
       {this.state.certifiers.map((address,i) => (
         <CertifierBox key={`certifier-${address}${i}`} address={address} />
       ))}
