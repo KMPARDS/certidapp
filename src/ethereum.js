@@ -20,13 +20,15 @@ const setGlobalVariables = () => {
   // window.userAddress = signer;//.then(address => window.userAddress = address);
 }
 
-window.ethereum.enable().then(setGlobalVariables);
+if(window.ethereum) {
+  window.ethereum.enable().then(setGlobalVariables);
 
-setInterval(() => {
-  if(window.web3 && window.web3.currentProvider && window.web3.currentProvider.selectedAddress.toLowerCase() !== window.userAddress.toLowerCase()) {
-    setGlobalVariables();
-  }
-},1000);
+  setInterval(() => {
+    if(window.web3 && window.web3.currentProvider && window.web3.currentProvider.selectedAddress.toLowerCase() !== window.userAddress.toLowerCase()) {
+      setGlobalVariables();
+    }
+  },1000);
+}
 
 
 // export { networkId, certificateContractInstance };

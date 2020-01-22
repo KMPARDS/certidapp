@@ -32,7 +32,13 @@ const App = props => (
         <div className="container">
           <Switch>
             <Route path="/" exact component={() => (
-              <p>Welcome to Certificate UI.<br />Please select an option from above.</p>
+              <p>
+                Welcome to Certificate UI.
+                <br />
+                {window.ethereum
+                  ? <>Please select an option from above.</>
+                  : <>You will need <a href="https://metamask.io/" rel="noopenner noreferrer">Metamask</a> installed if you want to register your certificate.</>}
+              </p>
             )} />
             <Route path="/register-certificate" exact component={RegisterCertificate} />
             <Route path="/view-certificate" exact component={ViewCertificate} />
