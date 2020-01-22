@@ -20,7 +20,7 @@ export default class extends Component {
 
     if(!logs.length) this.setState({ displayText: 'Certificate not yet registered or it does not exist' });
 
-    const txHash = logs[0].transactionHash;
+    const txHash = (logs.reverse())[0].transactionHash;
     const transaction = await window.provider.getTransaction(txHash);
     const decoded = window.certificateContractInstance.interface.decodeFunctionData('registerCertificate(bytes)',transaction.data)[0];
     window.certificates[this.props.match.params.hash] = window._z.parseCertificate(decoded);
