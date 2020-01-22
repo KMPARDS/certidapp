@@ -1,9 +1,11 @@
 {
   "name": "certificate-ui",
+  "homepage": "/certificate-react/",
   "version": "0.1.1",
   "private": true,
   "dependencies": {
     "ethers": "5.0.0-beta.170",
+    "history": "4.10.1",
     "qrcode": "1.4.4",
     "react": "16.10.2",
     "react-dom": "16.10.2",

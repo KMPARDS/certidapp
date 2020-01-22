@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
 import Navigation from './containers/Navigation/Navigation';
 import RegisterCertificate from './containers/RegisterCertificate/RegisterCertificate';
 import ViewCertificate from './containers/ViewCertificate/ViewCertificate';
@@ -11,6 +12,11 @@ import './App.css';
 
 import { network } from './env';
 
+const history = createBrowserHistory({
+  basename: process.env.PUBLIC_URL
+});
+
+
 window.ethers = require('ethers');
 window.provider = window.ethers.getDefaultProvider(network);
 window._z = require('./functions');
@@ -20,7 +26,7 @@ require('./ethereum');
 // window.certificateContractInstance = require('./ethereum').certificateContractInstance;
 
 const App = props => (
-  <BrowserRouter>
+  <BrowserRouter history={history}>
     <div className="App">
       <header className="App-header">
         <Navigation />
