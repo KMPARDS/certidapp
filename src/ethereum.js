@@ -1,5 +1,5 @@
 const ethers = require('ethers');
-const { certificateContract } = require('./env');
+const { certificateContract, network } = require('./env');
 
 const setGlobalVariables = () => {
   // console.log(window.web3.currentProvider);
@@ -28,6 +28,12 @@ if(window.ethereum) {
       setGlobalVariables();
     }
   },1000);
+} else {
+  window.certificateContractInstance = new ethers.Contract(
+    certificateContract.address,
+    certificateContract.abi,
+    ethers.getDefaultProvider(network)
+  );
 }
 
 
