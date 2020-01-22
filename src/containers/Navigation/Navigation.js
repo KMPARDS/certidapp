@@ -10,7 +10,7 @@ export default class extends Component {
 
   componentDidMount = () => {
     setInterval(() => {
-      const isManager = managerAddress === window.web3.currentProvider.selectedAddress;
+      const isManager = !!window.web3 && !!window.web3.currentProvider && managerAddress === window.web3.currentProvider.selectedAddress;
       if(isManager !== this.state.isManager) {
         this.setState({ isManager });
       }
