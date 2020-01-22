@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from "react-helmet";
 
 const ethers = require('ethers');
 
@@ -35,6 +36,13 @@ export default class extends Component {
 
   render = () => (
     <div>
+      <Helmet>
+        <title>Add Certifier</title>
+        <meta
+          name="description"
+          content="Add Certification Authority to certify."
+        />
+      </Helmet>
       <div className="form-group">
         <p>Enter Address of new certifier:</p>
         <input

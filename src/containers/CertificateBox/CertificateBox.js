@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from "react-helmet";
 import SignerBox from './SignerBox';
 import './CertificateBox.css';
 import { network } from '../../env';
@@ -22,6 +23,13 @@ export default class extends Component {
 
   render = () => (
     <div className="certificate-box" id="printable">
+      <Helmet>
+        <title>{this.props.certificateObj.parsedCertificate.name} is certified on Blockchain</title>
+        <meta
+          name="description"
+          content="View certifications on blockchain"
+        />
+      </Helmet>
       <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>
       <p><span className="course">{this.props.certificateObj.parsedCertificate.course}</span>
       {this.props.certificateObj.parsedCertificate.score

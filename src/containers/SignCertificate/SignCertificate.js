@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from "react-helmet";
 // import { certificateContract } from '../../env';
 
 const ethers = require('ethers');
@@ -71,6 +72,13 @@ export default class extends Component {
 
   render = () => (
     <>
+      <Helmet>
+        <title>Sign Certificate</title>
+        <meta
+          name="description"
+          content="Sign Certificate which can be submitted to blockchain"
+        />
+      </Helmet>
       {!this.state.isAuthorised ? <p className="error-message">Looks like {window.userAddress} is not authorised as a certifying authority, hence the smart contract will not accept certificates signed by this private key.</p> : null}
 
       <div className="form-group">

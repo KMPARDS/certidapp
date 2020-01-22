@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from "react-helmet";
 import CertificateBox from '../CertificateBox/CertificateBox';
 import { TX_STATUS_ENUM } from '../../env';
 
@@ -56,6 +57,13 @@ export default class extends Component {
 
   render = () => (
     <>
+      <Helmet>
+        <title>Register Certificate</title>
+        <meta
+          name="description"
+          content="Register your certificate on Blockchain"
+        />
+      </Helmet>
       <p>Paste your signed certificate in the below box:</p>
       <textarea className={['certificate-textarea', this.state.textAreaClass].filter(className=>!!className).join(' ')} onChange={this.onTextAreaChange} />
 

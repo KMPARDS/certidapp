@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from "react-helmet";
 import { certificateContract } from '../../env';
 import CertifierBox from './CertifierBox';
 
@@ -26,6 +27,13 @@ export default class extends Component {
 
   render = () => (
     <>
+      <Helmet>
+        <title>List of Certification Authorities</title>
+        <meta
+          name="description"
+          content="See all certification authorities"
+        />
+      </Helmet>
       {this.state.loading ? <>Please wait loading certifying authorities</> : null}
       {this.state.certifiers.map((address,i) => (
         <CertifierBox key={`certifier-${address}${i}`} address={address} />

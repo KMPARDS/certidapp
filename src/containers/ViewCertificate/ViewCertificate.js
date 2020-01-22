@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Helmet } from "react-helmet";
 import { certificateContract } from '../../env';
 
 const ethers = require('ethers');
@@ -61,6 +62,13 @@ export default class extends Component {
 
   render = () => (
     <>
+      <Helmet>
+        <title>View Certificate</title>
+        <meta
+          name="description"
+          content="View certificates on Blockchain"
+        />
+      </Helmet>
       <input
         className={`certificate-textinput${this.state.inputError ? ' invalid' : ''}`}
         type="text"
