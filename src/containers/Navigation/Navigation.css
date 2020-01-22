@@ -1,8 +1,9 @@
 .navigation-group {
   top: 0;
   background-color: #8888;
-  margin: 1rem;
+  margin: 1rem 0;
   position: fixed;
+  width: 100%
 }
 
 .navigation-element {
