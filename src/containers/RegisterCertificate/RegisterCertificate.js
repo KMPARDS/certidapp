@@ -50,7 +50,7 @@ export default class extends Component {
     await tx.wait();
     this.setState({ txStatus: TX_STATUS_ENUM.CONFIRMED });
     setTimeout(() => {
-      this.props.history.push(`${process.env.PUBLIC_URL ? '/'+process.env.PUBLIC_URL : ''}/view-certificate/${this.state.certificateObj.certificateHash}`);
+      this.props.history.push(`view-certificate/${this.state.certificateObj.certificateHash}`);
     },1000);
   }
 

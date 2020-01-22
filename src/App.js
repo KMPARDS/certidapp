@@ -31,7 +31,7 @@ const App = props => (
         <Navigation />
         <div className="container">
           <Switch>
-            <Route path="./" exact component={() => (
+            <Route path="/" exact component={() => (
               <p>Welcome to Certificate UI.<br />Please select an option from above.</p>
             )} />
             <Route path="/register-certificate" exact component={RegisterCertificate} />
