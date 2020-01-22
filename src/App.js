@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import Navigation from './containers/Navigation/Navigation';
 import RegisterCertificate from './containers/RegisterCertificate/RegisterCertificate';
@@ -16,7 +16,6 @@ const history = createBrowserHistory({
   basename: process.env.PUBLIC_URL
 });
 
-
 window.ethers = require('ethers');
 window.provider = window.ethers.getDefaultProvider(network);
 window._z = require('./functions');
@@ -26,13 +25,13 @@ require('./ethereum');
 // window.certificateContractInstance = require('./ethereum').certificateContractInstance;
 
 const App = props => (
-  <BrowserRouter history={history}>
+  <Router history={history}>
     <div className="App">
       <header className="App-header">
         <Navigation />
         <div className="container">
           <Switch>
-            <Route path="/" exact component={() => (
+            <Route path="./" exact component={() => (
               <p>Welcome to Certificate UI.<br />Please select an option from above.</p>
             )} />
             <Route path="/register-certificate" exact component={RegisterCertificate} />
@@ -45,7 +44,7 @@ const App = props => (
         </div>
       </header>
     </div>
-  </BrowserRouter>
+  </Router>
 )
 
 export default App;

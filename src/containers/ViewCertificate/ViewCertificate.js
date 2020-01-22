@@ -51,7 +51,7 @@ export default class extends Component {
       this.setState({ hashCheckStatus: HASH_CHECKING_ENUM.FOUND_VALID });
 
       setTimeout(() => {
-        this.props.history.push('/view-certificate/'+hash);
+        this.props.history.push(`${process.env.PUBLIC_URL ? '/'+process.env.PUBLIC_URL : ''}/view-certificate/${hash}`);
       }, 400);
     } catch(error) {
       this.setState({ inputError: true, displayText: error.message });
