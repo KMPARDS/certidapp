@@ -45,6 +45,14 @@
   font-size: 1rem;
   border:1px solid #cccccc;
   border-radius: .2rem;
+  text-align: center;
+  outline: none;
+}
+
+.certificate-textinput.invalid {
+  background-color: #CF000f19;
+  border: 2px solid #CF000F;
+  box-shadow: 0 0 5px #CF000F;
 }
 
 .certificate-textarea {
@@ -53,6 +61,7 @@
   border-radius: .2rem;
   font-size: 1.3rem;
   font-family: 'Share Tech Mono', monospace;
+  outline: none;
 }
 
 .certificate-textarea.valid {
@@ -74,14 +83,15 @@
   border: none;
   color: white;
   text-shadow: 0 0 4px #0004;
-  padding: 15px 32px;
+  padding: 12px 32px;
   margin: 1rem;
   text-align: center;
   text-decoration: none;
-  display: inline-block;
+  /* display:; */
   font-size: 16px;
   border-radius: .2rem;
   border:1px solid #888;
+  outline: none;
 }
 
 .btn:disabled,

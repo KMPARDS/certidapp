@@ -23,7 +23,7 @@ const setGlobalVariables = () => {
 window.ethereum.enable().then(setGlobalVariables);
 
 setInterval(() => {
-  if(window.web3.currentProvider.selectedAddress.toLowerCase() !== window.userAddress.toLowerCase()) {
+  if(window.web3 && window.web3.currentProvider && window.web3.currentProvider.selectedAddress.toLowerCase() !== window.userAddress.toLowerCase()) {
     setGlobalVariables();
   }
 },1000);

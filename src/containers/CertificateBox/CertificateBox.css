@@ -9,6 +9,7 @@
 
 .certificate-box .hash {
   word-break: break-all;
+  font-size: 1.2rem;
 }
 
 .certificate-box .name {

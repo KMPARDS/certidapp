@@ -20,13 +20,16 @@ export default class extends Component {
         address, nameBytes32
       );
 
-      this.setState({ statusMessage: 'Tx sent waiting for confirmation...' });
+      this.setState({
+        statusMessage: 'Tx sent waiting for confirmation...',
+        errorMessage: ''
+      });
 
       await tx.wait();
 
-      this.setState({ statusMessage: 'Certifier is Added!' })
+      this.setState({ statusMessage: 'Certifier is Added!', errorMessage: '' })
     } catch(error) {
-      this.setState({ errorMessage: error.message })
+      this.setState({ errorMessage: error.message, statusMessage: '' })
     }
   }
 

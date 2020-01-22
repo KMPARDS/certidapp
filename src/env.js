@@ -4,7 +4,7 @@ const network = 'kovan';
 const managerAddress = '0xc8e1f3b9a0cdfcef9ffd2343b943989a22517b26';
 
 const certificateContract = {
-  address: '0x3ECe25783491d8FC789B0E3ddF4Fa610843710CC',
+  address: '0x88B3F535fe402fC3Cf1f7e7FBEaf1197c8ebFA9e',
   abi: certificateStorageJSON.abi
 };
 

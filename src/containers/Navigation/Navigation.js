@@ -20,6 +20,7 @@ export default class extends Component {
   render = () => (
     <div className="navigation-group">
       <NavigationElement heading="Register Certificate" />
+      <NavigationElement heading="View Certificate" />
       {this.state.isManager ? <NavigationElement heading="Add Certifier" /> : null}
       <NavigationElement heading="List Authorities" />
       <NavigationElement heading="Sign Certificate" />

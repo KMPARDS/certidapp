@@ -5,7 +5,7 @@ const NavigationElement = props => {
   const urlFormat = props.heading.toLowerCase().split(' ').join('-');
 
   return (
-    <button className={`navigation-element${props.location.pathname === `/${urlFormat}` ? ' active' : ''}`} style={{cursor: 'pointer'}} onClick={() => props.history.push(`${urlFormat}`)}>{props.heading}</button>
+    <button className={`navigation-element${props.location.pathname === `/${urlFormat}` ? ' active' : ''}`} style={{cursor: 'pointer'}} onClick={() => props.history.push(`/${urlFormat}`)}>{props.heading}</button>
   );
 };
 

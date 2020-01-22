@@ -1,6 +1,16 @@
 const ethers = require('ethers');
 
+const parseCertificateObj = certificateObj => {
+  const unsignedCertificate = ethers.utils.hexlify(ethers.utils.concat([certificateObj.name, certificateObj.qualification, certificateObj.extraData]));
+
+  return parseCertificate(unsignedCertificate);
+}
+
 const parseCertificate = certificateString => {
+  if(typeof certificateString === 'object') {
+    return parseCertificateObj(certificateString);
+  }
+
   if(certificateString.slice(0,2) === '0x') certificateString = certificateString.slice(2);
   if(certificateString.length < 96*2) throw new Error('Certificate length is too short');
   if((certificateString.length - 96*2) % 65*2 !== 0) throw new Error('Invalid certificate length');
@@ -53,7 +63,8 @@ function encodeQualification(courseName, percentile=0) {
   const courseNameHex = stringToBytes32(courseName).slice(0,62);
 
   // 2 byte percentile can display upto 2 decimal accuracy
-  const percentileMul100Hex = ethers.utils.hexlify(Math.floor(percentile*100));
+  let percentileMul100Hex = ethers.utils.hexlify(Math.floor(percentile*100));
+  while (percentileMul100Hex.length < 6) { percentileMul100Hex += '0'; }
   // console.log({courseNameHex,percentileMul100Hex});
 
   return ethers.utils.hexlify(ethers.utils.concat([courseNameHex, percentileMul100Hex]));

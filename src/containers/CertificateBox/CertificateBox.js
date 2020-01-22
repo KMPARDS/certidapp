@@ -1,26 +1,28 @@
 import React, { Component } from 'react';
 import SignerBox from './SignerBox';
 import './CertificateBox.css';
+import { network } from '../../env';
 
+const fs = require('fs');
 const ethers = require('ethers');
 
 export default class extends Component {
   state = {
-    validCertificate: this.props.validCertificate[0] || null
+    validCertificate: (this.props.validCertificate&&this.props.validCertificate[0]) || null
   };
 
   componentDidMount = () => {
     setInterval(() => {
-      if(this.state.validCertificate !== this.props.validCertificate[0]) {
+      if(this.props.validCertificate && this.state.validCertificate !== this.props.validCertificate[0]) {
         this.setState({ validCertificate: this.props.validCertificate[0] });
       }
     }, 100);
   }
 
   render = () => (
-    <div className="certificate-box">
-    {console.log(this.state.validCertificate, this.props.certificateObj.signatures.length)}
-      <p className="hash">Hash: {this.props.certificateObj.certificateHash}</p>
+    <div className="certificate-box" id="printable">
+      <p className="hash">Certificate Hash: {this.props.certificateObj.certificateHash}</p>
+      {this.props.certificateObj.txHash ? <p>Created at transaction {this.props.certificateObj.txHash.slice(0,6)}...{this.props.certificateObj.txHash.slice(62)}. <a target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${this.props.certificateObj.txHash}`}>View on EtherScan</a></p> : null}
       <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>
       <p><span className="course">{this.props.certificateObj.parsedCertificate.course}</span>
       {this.props.certificateObj.parsedCertificate.score
