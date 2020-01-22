@@ -3,7 +3,7 @@ import SignerBox from './SignerBox';
 import './CertificateBox.css';
 import { network } from '../../env';
 
-const fs = require('fs');
+const QRCode = require('qrcode');
 const ethers = require('ethers');
 
 export default class extends Component {
@@ -17,12 +17,11 @@ export default class extends Component {
         this.setState({ validCertificate: this.props.validCertificate[0] });
       }
     }, 100);
+    QRCode.toCanvas(document.getElementById('qrcode-canvas'), window.location.href, console.log);
   }
 
   render = () => (
     <div className="certificate-box" id="printable">
-      <p className="hash">Certificate Hash: {this.props.certificateObj.certificateHash}</p>
-      {this.props.certificateObj.txHash ? <p>Created at transaction {this.props.certificateObj.txHash.slice(0,6)}...{this.props.certificateObj.txHash.slice(62)}. <a target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${this.props.certificateObj.txHash}`}>View on EtherScan</a></p> : null}
       <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>
       <p><span className="course">{this.props.certificateObj.parsedCertificate.course}</span>
       {this.props.certificateObj.parsedCertificate.score
@@ -54,6 +53,14 @@ export default class extends Component {
         ))}
       </>
       : null}
+
+      <div class="row">
+        <div class="column1">
+          <p className="hash">Certificate Hash: {this.props.certificateObj.certificateHash}</p>
+          {this.props.certificateObj.txHash ? <p>Created at transaction {this.props.certificateObj.txHash.slice(0,6)}...{this.props.certificateObj.txHash.slice(62)}. <a target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${this.props.certificateObj.txHash}`}>View on EtherScan</a></p> : null}
+        </div>
+        <div class="column2"><canvas id="qrcode-canvas" /></div>
+      </div>
     </div>
   );
 }

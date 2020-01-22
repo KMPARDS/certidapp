@@ -37,3 +37,27 @@
   /* max-width: 80%; */
   background-color: #CF000f50;
 }
+
+#qrcode-canvas {
+  /* position: fixed; */
+  /* right: 17%;
+  top: 32.5%; */
+  width: min(20vw, 20vh) !important;
+  height: min(20vw, 20vh) !important;
+}
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.column1 {
+  float: left;
+  width: 75%;
+}
+.column2 {
+  float: left;
+  width: 25%;
+}
