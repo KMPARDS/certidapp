@@ -49,6 +49,9 @@ export default class extends Component {
     this.setState({ txStatus: TX_STATUS_ENUM.WAITING_FOR_CONFIRMATION });
     await tx.wait();
     this.setState({ txStatus: TX_STATUS_ENUM.CONFIRMED });
+    setTimeout(() => {
+      this.props.history.push('/view-certificate/'+this.state.certificateObj.certificateHash);
+    },1000);
   }
 
   render = () => (
