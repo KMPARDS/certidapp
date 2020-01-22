@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/certificate-react/static/css/main.7f4f9a84.chunk.css",
-    "main.js": "/certificate-react/static/js/main.d46f3a44.chunk.js",
-    "main.js.map": "/certificate-react/static/js/main.d46f3a44.chunk.js.map",
+    "main.js": "/certificate-react/static/js/main.ada80eca.chunk.js",
+    "main.js.map": "/certificate-react/static/js/main.ada80eca.chunk.js.map",
     "runtime-main.js": "/certificate-react/static/js/runtime-main.e716f80e.js",
     "runtime-main.js.map": "/certificate-react/static/js/runtime-main.e716f80e.js.map",
     "static/js/2.5ee00c6f.chunk.js": "/certificate-react/static/js/2.5ee00c6f.chunk.js",
     "static/js/2.5ee00c6f.chunk.js.map": "/certificate-react/static/js/2.5ee00c6f.chunk.js.map",
     "index.html": "/certificate-react/index.html",
-    "precache-manifest.645d703dd69c32c959fe767a8b1911c5.js": "/certificate-react/precache-manifest.645d703dd69c32c959fe767a8b1911c5.js",
+    "precache-manifest.86ce7c38528341e9fffdc6eff4f0393f.js": "/certificate-react/precache-manifest.86ce7c38528341e9fffdc6eff4f0393f.js",
     "service-worker.js": "/certificate-react/service-worker.js",
     "static/css/main.7f4f9a84.chunk.css.map": "/certificate-react/static/css/main.7f4f9a84.chunk.css.map"
   },
@@ -16,6 +16,6 @@
     "static/js/runtime-main.e716f80e.js",
     "static/js/2.5ee00c6f.chunk.js",
     "static/css/main.7f4f9a84.chunk.css",
-    "static/js/main.d46f3a44.chunk.js"
+    "static/js/main.ada80eca.chunk.js"
   ]
 }
