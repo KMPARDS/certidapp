@@ -33,7 +33,7 @@ const App = props => (
           <Switch>
             <Route path="/" exact component={() => (
               <p>
-                Welcome to Certificate UI.
+                Welcome to Blocks On Academics.
                 <br />
                 {window.ethereum
                   ? <>Please select an option from above.</>
