@@ -69,7 +69,12 @@ export default class extends Component {
         const content = (
           <>
           <p className="hash">Certificate Hash: {this.props.certificateObj.certificateHash}</p>
-          {this.props.certificateObj.txHash ? <p>Created at transaction {this.props.certificateObj.txHash.slice(0,6)}...{this.props.certificateObj.txHash.slice(62)}. <a target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${this.props.certificateObj.txHash}`}>View on EtherScan</a></p> : null}
+          {this.props.certificateObj.txHashArray ? <p>Created at transaction{this.props.certificateObj.txHashArray.length > 1 ? <>s</> : null}
+          {this.props.certificateObj.txHashArray.map(txHash => (
+            <><br />
+              {txHash.slice(0,6)}...{txHash.slice(62)}. <a target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${txHash}`}>View on EtherScan</a></>
+          ))}
+          </p> : null}
             </>
         );
 

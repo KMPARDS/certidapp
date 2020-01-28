@@ -43,11 +43,11 @@ export default class extends Component {
 
       if(hash.length !== 66) throw new Error('invalid hash length');
 
-      const certificateObj = await window.certificateContractInstance.functions.certificates(hash);
+      const certificateStruct = await window.certificateContractInstance.functions.certificates(hash);
 
-      window.certificates[hash] = window._z.parseCertificate(certificateObj);
+      // window.certificates[hash] = window._z.decodeCertificateData(certificateObj.data);
 
-      if(certificateObj.signers === '0x') throw new Error('Certificate not yet registered or it does not exist');
+      if(certificateStruct.signers === '0x') throw new Error('Certificate not yet registered or it does not exist');
 
       this.setState({ hashCheckStatus: HASH_CHECKING_ENUM.FOUND_VALID });
 

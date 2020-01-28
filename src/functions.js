@@ -1,4 +1,4 @@
-import { dataTypes, certOrder, authOrder } from './env';
+import { dataTypes, certOrder, authOrder, certificateContract } from './env';
 
 const ethers = require('ethers');
 
@@ -148,7 +148,11 @@ export function addSignaturesToCertificateRLP(encodedFullCertificate, signature 
   let signatureArray = typeof signature === 'object' ? signature : [signature];
   let certificateData;
   if(typeof encodedFullCertificate === 'object') {
-    certificateData = ethers.utils.RLP.decode(encodedFullCertificate.dataRLP);
+    if(encodedFullCertificate.dataRLP) {
+      certificateData = ethers.utils.RLP.decode(encodedFullCertificate.dataRLP);
+    } else {
+      certificateData = ethers.utils.RLP.decode(encodedFullCertificate.fullRLP)[0];
+    }
   } else {
     const decoded = ethers.utils.RLP.decode(encodedFullCertificate);
     certificateData = decoded[0];
@@ -249,6 +253,46 @@ export function decodeCertifyingAuthority(encodedAuthorityData) {
     }
   });
   return obj;
+}
+
+export async function getCertificateObjFromCertificateHash(certificateHash) {
+  const logs = await window.provider.getLogs({
+    address: certificateContract.address,
+    fromBlock: 0,
+    toBlock: 'latest',
+    topics: [ethers.utils.id('Certified(bytes32,address)'), certificateHash]
+  });
+
+  if(!logs.length) this.setState({ displayText: 'Certificate not yet registered or it does not exist' });
+
+  let certificateObj, txHashArray = [];
+
+  for(const log of logs) {
+    const txHash = log.transactionHash;
+    const transaction = await window.provider.getTransaction(txHash);
+    const decoded = window.certificateContractInstance.interface.decodeFunctionData('registerCertificate(bytes)',transaction.data)[0];
+
+    if(!certificateObj) {
+      certificateObj = {
+        fullRLP: decoded,
+        ...decodeCertificateData(decoded)
+      };
+    } else {
+      certificateObj = {
+        ...certificateObj,
+        ...addSignaturesToCertificateRLP(
+          certificateObj,
+          decodeCertificateData(decoded).signatures
+        )
+      };
+    }
+
+    txHashArray.push(txHash);
+  }
+
+  certificateObj.txHashArray = txHashArray;
+
+  return certificateObj;
 }
 
 export function toTitleCase(str) {
