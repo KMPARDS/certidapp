@@ -239,7 +239,7 @@ export function decodeCertifyingAuthority(encodedAuthorityData) {
   const decoded = ethers.utils.RLP.decode(encodedAuthorityData);
   decoded.forEach((entry, i) => {
     if(i < authOrder.length) {
-      obj[certOrder[i]] = ethers.utils.toUtf8String(entry);
+      obj[authOrder[i]] = ethers.utils.toUtf8String(entry);
     } else if(i > authOrder.length){
       const type = dataTypes[+('0x'+decoded[authOrder.length].slice(1+i-authOrder.length, 2+i-authOrder.length))];
       // console.log({value: entry[1], type});
@@ -247,4 +247,15 @@ export function decodeCertifyingAuthority(encodedAuthorityData) {
     }
   });
   return obj;
+}
+
+export function toTitleCase(str) {
+  return str.split(' ').map(str1 => str1.slice(0,1).toUpperCase()+str1.slice(1)).join(' ');
+}
+
+export function toWebsiteURL(website) {
+  if(website.slice(0,4) !== 'http') {
+    website = 'http://' + website;
+  }
+  return website;
 }

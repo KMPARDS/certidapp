@@ -7,6 +7,7 @@ export default class extends Component {
   state = {
     address: '',
     name: '',
+    website: '',
     errorMessage: '',
     statusMessage: ''
   };
@@ -15,10 +16,13 @@ export default class extends Component {
     this.setState({ errorMessage: '', statusMessage: '' })
     try {
       const address = ethers.utils.getAddress(this.state.address);
-      const nameBytes32 = window._z.stringToBytes32(this.state.name);
+      const encoded = window._z.encodeCertifyingAuthority({
+        name: this.state.name,
+        website: this.state.website
+      });
 
       const tx = await window.certificateContractInstance.functions.addCertifyingAuthority(
-        address, nameBytes32
+        address, encoded
       );
 
       this.setState({
@@ -58,8 +62,16 @@ export default class extends Component {
           className="certificate-textinput"
           type="text"
           placeholder="New Certifier Name"
-          maxLength="32"
           onChange={event => this.setState({name: event.target.value})}/>
+      </div>
+
+      <div className="form-group">
+        <p>Enter Website of new certifier:</p>
+        <input
+          className="certificate-textinput"
+          type="text"
+          placeholder="Certifier Website"
+          onChange={event => this.setState({website: event.target.value})}/>
       </div>
 
       {this.state.errorMessage ? <p className="error-message">Error: {this.state.errorMessage}</p> : null}
