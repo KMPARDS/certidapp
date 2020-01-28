@@ -13,16 +13,20 @@ export default class extends Component {
 
   componentDidMount = () => {
     const setManager = async() => {
-      const managerAddress = await window.certificateContractInstance.functions.manager();
-      this.state.managerAddress = managerAddress;
-      return true;
+      if(window.certificateContractInstance) {
+        const managerAddress = await window.certificateContractInstance.functions.manager();
+        this.state.managerAddress = managerAddress;
+        return true;
+      }
+      return false;
     }
 
-    const intervalId = setInterval(() => {
-      if(setManager()) {
+    const intervalId = setInterval(async() => {
+      if(await setManager()) {
+        // console.log('setManager cleared');
         clearInterval(intervalId);
       }
-    }, 1000);
+    }, 100);
 
     setInterval(() => {
       const isManager = !!window.web3 && !!window.web3.currentProvider && !!this.state.managerAddress && this.state.managerAddress.toLowerCase() === window.web3.currentProvider.selectedAddress.toLowerCase();
@@ -38,7 +42,7 @@ export default class extends Component {
           this.setState({ displayHideButton: !this.state.showAllItems });
         }
       }
-    }, 500);
+    }, 100);
   };
 
   render = () => (

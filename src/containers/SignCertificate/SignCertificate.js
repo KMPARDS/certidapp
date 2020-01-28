@@ -20,6 +20,7 @@ export default class extends Component {
     score: '',
     extraData: '',
     encodedCertificate: '',
+    authorityName: '',
     isAuthorised: true,
     certificatesToSign: [],
     errorsInCSV: '',
@@ -27,17 +28,37 @@ export default class extends Component {
     certificatesSigned: []
   };
 
-  componentDidMount = async() => {
-    try {
-      const certifyingAuthority = await window.certificateContractInstance.functions.certifyingAuthorities(await window.signer.getAddress());
+  intervalId = null;
+  signerAddress = null;
 
-      if(!certifyingAuthority.isAuthorised) {
-        this.setState({ isAuthorised: false });
+  componentDidMount = () => {
+    this.intervalId = setInterval(async() => {
+      if(window.signer) {
+        const currentAddress = await window.signer.getAddress();
+        if(currentAddress !== this.signerAddress) {
+          try {
+            const certifyingAuthority = await window.certificateContractInstance.functions.certifyingAuthorities(currentAddress);
+
+            if(certifyingAuthority.isAuthorised) {
+              const authorityName = window._z.decodeCertifyingAuthority(certifyingAuthority.data).name;
+
+              this.setState({ authorityName, isAuthorised: true });
+            } else {
+              this.setState({ authorityName: null, isAuthorised: false });
+            }
+
+
+          } catch(error) {
+            console.error(error);
+          }
+          this.signerAddress = currentAddress;
+        }
       }
-    } catch(error) {
-      console.error(error);
-      setTimeout(this.componentDidMount, 1000);
-    }
+    }, 100);
+  }
+
+  componentWillUnmount = () => {
+    clearInterval(this.intervalId);
   }
 
   signThisCertificate = async() => {
@@ -321,7 +342,9 @@ export default class extends Component {
             content="Sign Certificate which can be submitted to blockchain"
           />
         </Helmet>
-        {!this.state.isAuthorised ? <p className="error-message">Looks like {window.userAddress} is not authorised as a certifying authority, hence the smart contract will not accept certificates signed by this private key.</p> : null}
+        {this.state.isAuthorised
+          ? <p className="status-message">Welcome {this.state.authorityName}! Using this portal you can sign certificates on your half and send the generated certificate hex strings to your students/clients so they can register those certificates.</p>
+          : <p className="error-message">Looks like {window.userAddress} is not authorised as a certifying authority, hence the smart contract will not accept certificates signed by this private key.</p>}
 
         {screen}
       </>

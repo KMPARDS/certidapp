@@ -25,10 +25,10 @@ const setUpMetamask = () => {
     window.ethereum.enable().then(setGlobalVariables);
 
     setInterval(() => {
-      if(window.web3 && window.web3.currentProvider && window.web3.currentProvider.selectedAddress.toLowerCase() !== window.userAddress.toLowerCase()) {
+      if(window.web3 && window.web3.currentProvider && window.web3.currentProvider.selectedAddress && window.userAddress && window.web3.currentProvider.selectedAddress.toLowerCase() !== window.userAddress.toLowerCase()) {
         setGlobalVariables();
       }
-    },1000);
+    },100);
 
     return true;
   } catch (error) {
@@ -50,7 +50,7 @@ if(window.ethereum) {
       console.log('Metamask setup done!');
       clearInterval(intervalId);
     }
-  }, 1000);
+  }, 100);
 }
 
 
