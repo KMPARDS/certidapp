@@ -1,18 +1,20 @@
 const certificateStorageJSON = require('./compiledContracts/CertificateStorage_CertificateStorage.json');
 
-const network = 'kovan';
-const managerAddress = '0xc8e1f3b9a0cdfcef9ffd2343b943989a22517b26';
-
-const certificateContract = {
-  address: '0x88B3F535fe402fC3Cf1f7e7FBEaf1197c8ebFA9e',
-  abi: certificateStorageJSON.abi
+const env = {
+  network: 'kovan',
+  certificateContract: {
+    address: '0x34AEA1D67C5484133BeE0E60aEbB9882a772f64B',
+    abi: certificateStorageJSON.abi
+  },
+  dataTypes: [null, 'bytes', 'number', 'float', 'string', 'boolean', 'image', 'date'],
+  order: ['name', 'subject', 'score', 'category'],
+  managerAddress: '0xc8e1f3b9a0cdfcef9ffd2343b943989a22517b26',
+  TX_STATUS_ENUM: {
+    NOT_INITIATED: 0,
+    SIGNING: 1,
+    WAITING_FOR_CONFIRMATION: 2,
+    CONFIRMED: 3
+  },
 };
 
-const TX_STATUS_ENUM = {
-  NOT_INITIATED: 0,
-  SIGNING: 1,
-  WAITING_FOR_CONFIRMATION: 2,
-  CONFIRMED: 3
-}
-
-module.exports = { network, certificateContract, managerAddress, TX_STATUS_ENUM };
+module.exports = env;

@@ -20,20 +20,37 @@ const setGlobalVariables = () => {
   // window.userAddress = signer;//.then(address => window.userAddress = address);
 }
 
-if(window.ethereum) {
-  window.ethereum.enable().then(setGlobalVariables);
+const setUpMetamask = () => {
+  try {
+    window.ethereum.enable().then(setGlobalVariables);
 
-  setInterval(() => {
-    if(window.web3 && window.web3.currentProvider && window.web3.currentProvider.selectedAddress.toLowerCase() !== window.userAddress.toLowerCase()) {
-      setGlobalVariables();
-    }
-  },1000);
+    setInterval(() => {
+      if(window.web3 && window.web3.currentProvider && window.web3.currentProvider.selectedAddress.toLowerCase() !== window.userAddress.toLowerCase()) {
+        setGlobalVariables();
+      }
+    },1000);
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+if(window.ethereum) {
+  setUpMetamask();
 } else {
   window.certificateContractInstance = new ethers.Contract(
     certificateContract.address,
     certificateContract.abi,
     ethers.getDefaultProvider(network)
   );
+
+  const intervalId = setInterval(() => {
+    if(setUpMetamask()) {
+      console.log('Metamask setup done!');
+      clearInterval(intervalId);
+    }
+  });
 }
 
 

@@ -7,12 +7,15 @@ export default class extends Component {
   state = {
     isManager: false,
     showAllItems: true,
-    displayHideButton: false
+    displayHideButton: false,
+    managerAddress: null
   };
 
   componentDidMount = () => {
+    
+
     setInterval(() => {
-      const isManager = !!window.web3 && !!window.web3.currentProvider && managerAddress === window.web3.currentProvider.selectedAddress;
+      const isManager = !!window.web3 && !!window.web3.currentProvider && !!this.state.managerAddress && this.state.managerAddress === window.web3.currentProvider.selectedAddress;
       if(isManager !== this.state.isManager) {
         this.setState({ isManager });
       }
