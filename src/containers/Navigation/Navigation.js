@@ -12,10 +12,20 @@ export default class extends Component {
   };
 
   componentDidMount = () => {
-    
+    const setManager = async() => {
+      const managerAddress = await window.certificateContractInstance.functions.manager();
+      this.state.managerAddress = managerAddress;
+      return true;
+    }
+
+    const intervalId = setInterval(() => {
+      if(setManager()) {
+        clearInterval(intervalId);
+      }
+    }, 1000);
 
     setInterval(() => {
-      const isManager = !!window.web3 && !!window.web3.currentProvider && !!this.state.managerAddress && this.state.managerAddress === window.web3.currentProvider.selectedAddress;
+      const isManager = !!window.web3 && !!window.web3.currentProvider && !!this.state.managerAddress && this.state.managerAddress.toLowerCase() === window.web3.currentProvider.selectedAddress.toLowerCase();
       if(isManager !== this.state.isManager) {
         this.setState({ isManager });
       }
