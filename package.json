@@ -4,6 +4,7 @@
   "version": "0.1.1",
   "private": true,
   "dependencies": {
+    "copy-to-clipboard": "^3.2.0",
     "ethers": "5.0.0-beta.170",
     "history": "4.10.1",
     "qrcode": "1.4.4",
