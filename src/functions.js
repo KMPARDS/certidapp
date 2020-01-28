@@ -1,12 +1,12 @@
-import { dataTypes, order } from './env';
+import { dataTypes, certOrder, authOrder } from './env';
 
 const ethers = require('ethers');
 
-function bytesToString(bytes) {
+export function bytesToString(bytes) {
   return ethers.utils.toUtf8String(bytes).split('\u0000').join('');
 }
 
-function parsePackedAddress(packedAddresses) {
+export function parsePackedAddress(packedAddresses) {
   if(packedAddresses.slice(0,2).toLowerCase() === '0x') packedAddresses = packedAddresses.slice(2);
   if(packedAddresses.length%40 !== 0) throw new Error('Invalid packed addresses');
   const addressArray = [];
@@ -16,15 +16,13 @@ function parsePackedAddress(packedAddresses) {
   return addressArray;
 }
 
-
-
-function getDataTypeHexByte(type) {
+export function getDataTypeHexByte(type) {
   const index = dataTypes.indexOf(type);
   if(index === -1) throw new Error('Invalid certificate data type: ' + type);
   return index.toString(16);
 }
 
-function guessDataTypeFromInput(input) {
+export function guessDataTypeFromInput(input) {
   switch(typeof input) {
     case 'string':
       if(input.slice(0,2) === '0x') {
@@ -43,7 +41,7 @@ function guessDataTypeFromInput(input) {
 
 // remaining for image and data
 // take number or string and convert it into bytes
-function bytify(input, type) {
+export function bytify(input, type) {
   switch(type || guessDataTypeFromInput(input)) {
     case 'bytes':
       return input;
@@ -69,7 +67,7 @@ function bytify(input, type) {
   }
 }
 
-function renderBytes(hex, type) {
+export function renderBytes(hex, type) {
   switch(type) {
     case 'bytes':
       return hex;
@@ -90,22 +88,22 @@ function renderBytes(hex, type) {
   }
 }
 
-function isProperValue(input) {
+export function isProperValue(input) {
   return ![undefined, null, NaN].includes(input);
 }
 
-function getCertificateHashFromDataRLP(certificateDataRLP) {
+export function getCertificateHashFromDataRLP(certificateDataRLP) {
   const digest = ethers.utils.hexlify(ethers.utils.concat([ethers.utils.toUtf8Bytes('\x19Ethereum Signed Message:\n'+(certificateDataRLP.length/2 - 1)),certificateDataRLP]));
   return ethers.utils.keccak256(digest);
 }
 
-function encodeCertificateObject(obj, signature = []) {
+export function encodeCertificateObject(obj, signature = []) {
   let signatureArray = typeof signature === 'object' ? signature : [signature];
   const entries = Object.entries(obj);
   const certRLPArray = [];
 
   // adding name and subject into rlpArray
-  order.forEach(property => {
+  certOrder.forEach(property => {
     if(property === 'score') {
       // adding score into rlpArray
       if(isProperValue(obj['score'])) {
@@ -119,7 +117,7 @@ function encodeCertificateObject(obj, signature = []) {
     }
   });
 
-  const extraData = entries.filter(property => !order.includes(property[0]) && isProperValue(property[1]));
+  const extraData = entries.filter(property => !certOrder.includes(property[0]) && isProperValue(property[1]));
 
   if(extraData.length) {
     // pushing datatype storage of the extra datas
@@ -137,7 +135,7 @@ function encodeCertificateObject(obj, signature = []) {
     certRLPArray[datatypeIndex] = '0x' + certRLPArray[datatypeIndex];
   }
 
-  console.log(certRLPArray);
+  // console.log(certRLPArray);
   const dataRLP = ethers.utils.RLP.encode(certRLPArray);
   return {
     fullRLP: ethers.utils.RLP.encode([certRLPArray, ...signatureArray]),
@@ -146,7 +144,7 @@ function encodeCertificateObject(obj, signature = []) {
   };
 }
 
-function addSignaturesToCertificateRLP(encodedFullCertificate, signature = []) {
+export function addSignaturesToCertificateRLP(encodedFullCertificate, signature = []) {
   let signatureArray = typeof signature === 'object' ? signature : [signature];
   let certificateData;
   if(typeof encodedFullCertificate === 'object') {
@@ -168,7 +166,7 @@ function addSignaturesToCertificateRLP(encodedFullCertificate, signature = []) {
   };
 }
 
-function decodeCertificateData(encodedCertificate) {
+export function decodeCertificateData(encodedCertificate) {
   let fullRLP = typeof encodedCertificate === 'object' ? encodedCertificate.fullRLP : encodedCertificate;
   const decoded = ethers.utils.RLP.decode(fullRLP);
   const obj = {};
@@ -183,14 +181,14 @@ function decodeCertificateData(encodedCertificate) {
   }
 
   decodedCertificatePart.forEach((entry, i) => {
-    if(i < order.length) {
-      if(order[i] !== 'score') {
-        obj[order[i]] = ethers.utils.toUtf8String(entry);
+    if(i < certOrder.length) {
+      if(certOrder[i] !== 'score') {
+        obj[certOrder[i]] = ethers.utils.toUtf8String(entry);
       } else {
-        obj[order[i]] = renderBytes(entry, 'float');
+        obj[certOrder[i]] = renderBytes(entry, 'float');
       }
-    } else if(i > order.length){
-      const type = dataTypes[+('0x'+decodedCertificatePart[order.length].slice(1+i-order.length, 2+i-order.length))];
+    } else if(i > certOrder.length){
+      const type = dataTypes[+('0x'+decodedCertificatePart[certOrder.length].slice(1+i-certOrder.length, 2+i-certOrder.length))];
       // console.log({value: entry[1], type});
       obj[bytesToString(entry[0])] = renderBytes(entry[1], type);
     }
@@ -202,5 +200,51 @@ function decodeCertificateData(encodedCertificate) {
     obj[key] = signatureArray;
   }
 
+  return obj;
+}
+
+export function encodeCertifyingAuthority(obj) {
+  const entries = Object.entries(obj);
+  const rlpArray = [];
+
+  authOrder.forEach(property => {
+    const hex = isProperValue(obj[property]) ? bytify(obj[property]) : '0x';
+    rlpArray.push(hex);
+  });
+
+  const extraData = entries.filter(property => !authOrder.includes(property[0]) && isProperValue(property[1]));
+
+  if(extraData.length) {
+    // pushing datatype storage of the extra datas
+    rlpArray.push('');
+    const datatypeIndex = rlpArray.length - 1;
+    extraData.forEach(property => {
+      rlpArray[datatypeIndex] = rlpArray[datatypeIndex] + getDataTypeHexByte(guessDataTypeFromInput(property[1]));
+      rlpArray.push([bytify(property[0]), bytify(property[1])]);
+    });
+
+    if(rlpArray[datatypeIndex].length % 2) {
+      rlpArray[datatypeIndex] = rlpArray[datatypeIndex] + '0';
+    }
+
+    rlpArray[datatypeIndex] = '0x' + rlpArray[datatypeIndex];
+  }
+
+  // console.log(rlpArray);
+  return ethers.utils.RLP.encode(rlpArray);
+}
+
+export function decodeCertifyingAuthority(encodedAuthorityData) {
+  const obj = {};
+  const decoded = ethers.utils.RLP.decode(encodedAuthorityData);
+  decoded.forEach((entry, i) => {
+    if(i < authOrder.length) {
+      obj[certOrder[i]] = ethers.utils.toUtf8String(entry);
+    } else if(i > authOrder.length){
+      const type = dataTypes[+('0x'+decoded[authOrder.length].slice(1+i-authOrder.length, 2+i-authOrder.length))];
+      // console.log({value: entry[1], type});
+      obj[bytesToString(entry[0])] = renderBytes(entry[1], type);
+    }
+  });
   return obj;
 }

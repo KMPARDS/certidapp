@@ -7,7 +7,8 @@ const env = {
     abi: certificateStorageJSON.abi
   },
   dataTypes: [null, 'bytes', 'number', 'float', 'string', 'boolean', 'image', 'date'],
-  order: ['name', 'subject', 'score', 'category'],
+  certOrder: ['name', 'subject', 'score', 'category'],
+  authOrder: ['name', 'website'],
   managerAddress: '0xc8e1f3b9a0cdfcef9ffd2343b943989a22517b26',
   TX_STATUS_ENUM: {
     NOT_INITIATED: 0,
