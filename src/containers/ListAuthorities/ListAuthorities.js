@@ -34,10 +34,13 @@ export default class extends Component {
           content="See all certification authorities"
         />
       </Helmet>
-      {this.state.loading ? <>Please wait loading certifying authorities</> : null}
-      {this.state.certifiers.map((address,i) => (
-        <CertifierBox key={`certifier-${address}${i}`} address={address} />
-      ))}
+      {this.state.loading
+        ? <>Please wait loading certifying authorities...</>
+        : <>
+          {this.state.certifiers.length ? <>{this.state.certifiers.map((address,i) => (
+            <CertifierBox key={`certifier-${address}${i}`} address={address} />
+          ))}</> : <>No certifying authorities currently.</>}
+        </>}
     </>
   );
 }

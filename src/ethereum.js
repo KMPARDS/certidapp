@@ -50,7 +50,7 @@ if(window.ethereum) {
       console.log('Metamask setup done!');
       clearInterval(intervalId);
     }
-  });
+  }, 1000);
 }
 
 
