@@ -38,6 +38,11 @@
   background-color: #CF000f50;
 }
 
+.certificate-box .signer-box.loading {
+  /* max-width: 80%; */
+  background-color: #0003;
+}
+
 #qrcode-canvas {
   /* position: fixed; */
   /* right: 17%;

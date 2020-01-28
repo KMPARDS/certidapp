@@ -5,19 +5,27 @@ const ethers = require('ethers');
 
 export default class extends Component {
   state = {
+    loading: true,
+    signerAddress: null,
     name: null,
-    isAuthorised: null,
-    boxClassName: null
+    website: null,
+    isAuthorised: null
   };
 
   componentDidMount = async() => {
-    const certifyingAuthority = await window.certificateContractInstance.certifyingAuthorities(this.props.signer);
-    console.log('certifyingAuthority', certifyingAuthority);
+    const signerAddress = ethers.utils.recoverAddress(this.props.certificateHash, this.props.signature);
+    this.setState({ signerAddress });
+    // console.log({signer});
+    const certifyingAuthority = await window.certificateContractInstance.certifyingAuthorities(signerAddress);
+    // console.log('certifyingAuthority', certifyingAuthority);
+
+    const caObj = window._z.decodeCertifyingAuthority(certifyingAuthority.data);
 
     this.setState({
-      name: ethers.utils.toUtf8String(certifyingAuthority.name).split('\u0000').join(''),
+      name: caObj.name,
+      website: window._z.toWebsiteURL(caObj.website),
       isAuthorised: certifyingAuthority.isAuthorised,
-      boxClassName: certifyingAuthority.isAuthorised ? 'valid' : 'invalid'
+      loading: false
     });
 
     console.log('found', certifyingAuthority.isAuthorised);
@@ -30,10 +38,21 @@ export default class extends Component {
     }
   };
 
-  render = () => (
-    <div className={['signer-box', this.state.boxClassName].filter(className=>!!className).join(' ')}>
-      <p>Signer {this.props.serial}: {this.state.name ? <>{this.state.name}({this.props.signer.slice(0,6)}...{this.props.signer.slice(38)})</> : <>{this.props.signer}</>}</p>
-      <p>Signature: {this.props.signature.slice(0,10)}...{this.props.signature.slice(122)}</p>
-    </div>
-  );
+  render = () => {
+    let signerAuthorisedClass;
+    if(this.state.loading) {
+      signerAuthorisedClass = 'loading';
+    } else if(this.state.isAuthorised) {
+      signerAuthorisedClass = 'valid';
+    } else {
+      signerAuthorisedClass = 'invalid';
+    }
+
+    return (
+      <div className={['signer-box', signerAuthorisedClass].filter(className=>!!className).join(' ')}>
+        <p>Signer {this.props.serial}: {this.state.name ? <>{this.state.name}({this.state.signerAddress.slice(0,6)}...{this.state.signerAddress.slice(38)})</> : (this.state.signerAddress ? <>{this.state.signerAddress}</> : <>Computing address...</>)}</p>
+        <p>Signature: {this.props.signature.slice(0,10)}...{this.props.signature.slice(122)}</p>
+      </div>
+    );
+  }
 }

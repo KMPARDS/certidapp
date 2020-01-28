@@ -19,7 +19,7 @@ export default class extends Component {
     const spacesRemoved = event.target.value.split(' ').join('').split('\n').join('');
     // console.log(spacesRemoved);
     try {
-      const certificateObj = window._z.parseCertificate(spacesRemoved);
+      const certificateObj = window._z.decodeCertificateData(spacesRemoved);
 
       this.setState({
         certificateString: spacesRemoved,
@@ -76,6 +76,7 @@ export default class extends Component {
           <p>Your certificate preview:</p>
           <CertificateBox
             certificateObj={this.state.certificateObj}
+            qrDisplay={false}
             validCertificate={[this.state.validCertificate, newStatus => this.setState({ validCertificate: newStatus })]}
             />
         </>

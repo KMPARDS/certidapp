@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Helmet } from "react-helmet";
 import SignerBox from './SignerBox';
 import './CertificateBox.css';
-import { network } from '../../env';
+import { network, certOrder } from '../../env';
 
 const QRCode = require('qrcode');
 const ethers = require('ethers');
@@ -18,7 +18,7 @@ export default class extends Component {
         this.setState({ validCertificate: this.props.validCertificate[0] });
       }
     }, 100);
-    QRCode.toCanvas(document.getElementById('qrcode-canvas'), window.location.href, console.log);
+    if(this.props.qrDisplay) QRCode.toCanvas(document.getElementById('qrcode-canvas'), window.location.href);
   }
 
   render = () => (
@@ -30,14 +30,17 @@ export default class extends Component {
           content="View certifications on blockchain"
         />
       </Helmet>
+      <p>Certificate of {this.props.certificateObj.parsedCertificate.category}</p>
       <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>
-      <p><span className="course">{this.props.certificateObj.parsedCertificate.course}</span>
+      <p><span className="subject">{this.props.certificateObj.parsedCertificate.subject}</span>
       {this.props.certificateObj.parsedCertificate.score
         ? <> (<span className="score">{this.props.certificateObj.parsedCertificate.score}%</span>)</>
         : null}</p>
-      {this.props.certificateObj.parsedCertificate.extraData !== ethers.utils.hexZeroPad('0x', 32)
-        ? <p><b>ExtraData:</b> {this.props.certificateObj.parsedCertificate.extraData}</p>
-        : null}
+
+      {Object.keys(this.props.certificateObj.parsedCertificate).filter(key => !certOrder.includes(key)).map(key => (
+        <p key={'cert-'+key} className={key}>{this.props.certificateObj.parsedCertificate[key]}</p>
+      ))}
+
 
       <p>{this.state.validCertificate === this.props.certificateObj.signatures.length
         ? <>This is to certify that the above certificate information is signed by following {this.state.validCertificate} signer{this.state.validCertificate > 1 ? <>s</>:null} which is cryptographically verified by the certificate smart contract.</>
@@ -50,25 +53,40 @@ export default class extends Component {
 
       {this.props.certificateObj.signatures.length
       ? <>
-        {this.props.certificateObj.signatures.map((entry, i) => (
+        {this.props.certificateObj.signatures.map((signature, i) => (
           <SignerBox
             key={'signer-'+i}
             serial={i+1}
-            signer={entry.signer}
-            signature={entry.rawSignature}
+            certificateHash={this.props.certificateObj.certificateHash}
+            signature={signature}
             validCertificate={this.props.validCertificate || [this.state.validCertificate, newStatus => this.setState({ validCertificate: newStatus })]}
             />
         ))}
       </>
       : null}
 
-      <div class="row">
-        <div class="column1">
+      {(() => {
+        const content = (
+          <>
           <p className="hash">Certificate Hash: {this.props.certificateObj.certificateHash}</p>
           {this.props.certificateObj.txHash ? <p>Created at transaction {this.props.certificateObj.txHash.slice(0,6)}...{this.props.certificateObj.txHash.slice(62)}. <a target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${this.props.certificateObj.txHash}`}>View on EtherScan</a></p> : null}
-        </div>
-        <div class="column2"><canvas id="qrcode-canvas" /></div>
-      </div>
+            </>
+        );
+
+        if(this.props.qrDisplay) {
+          content = (
+            <div className="row">
+              <div className="column1">
+                {content}
+              </div>
+              <div className="column2"><canvas id="qrcode-canvas" /></div>
+            </div>
+          );
+        }
+
+        return content;
+      })()}
+
     </div>
   );
 }

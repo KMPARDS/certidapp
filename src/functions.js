@@ -169,7 +169,7 @@ export function addSignaturesToCertificateRLP(encodedFullCertificate, signature 
 export function decodeCertificateData(encodedCertificate) {
   let fullRLP = typeof encodedCertificate === 'object' ? encodedCertificate.fullRLP : encodedCertificate;
   const decoded = ethers.utils.RLP.decode(fullRLP);
-  const obj = {};
+  const parsedCertificate = {};
 
   let decodedCertificatePart, signatureArray;
   //checking if decoded is of fullRLP or certificate data part
@@ -183,24 +183,26 @@ export function decodeCertificateData(encodedCertificate) {
   decodedCertificatePart.forEach((entry, i) => {
     if(i < certOrder.length) {
       if(certOrder[i] !== 'score') {
-        obj[certOrder[i]] = ethers.utils.toUtf8String(entry);
+        parsedCertificate[certOrder[i]] = ethers.utils.toUtf8String(entry);
       } else {
-        obj[certOrder[i]] = renderBytes(entry, 'float');
+        parsedCertificate[certOrder[i]] = renderBytes(entry, 'float');
       }
     } else if(i > certOrder.length){
       const type = dataTypes[+('0x'+decodedCertificatePart[certOrder.length].slice(1+i-certOrder.length, 2+i-certOrder.length))];
       // console.log({value: entry[1], type});
-      obj[bytesToString(entry[0])] = renderBytes(entry[1], type);
+      parsedCertificate[bytesToString(entry[0])] = renderBytes(entry[1], type);
     }
   });
 
+  const returnObj = { parsedCertificate };
+
+  returnObj.certificateHash = getCertificateHashFromDataRLP(ethers.utils.RLP.encode(decodedCertificatePart));
+
   if(signatureArray) {
-    let key = '_signatures';
-    while(obj[key]) key = '_' + key;
-    obj[key] = signatureArray;
+    returnObj.signatures = signatureArray;
   }
 
-  return obj;
+  return returnObj;
 }
 
 export function encodeCertifyingAuthority(obj) {
