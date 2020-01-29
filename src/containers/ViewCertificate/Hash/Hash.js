@@ -21,6 +21,7 @@ export default class extends Component {
       {this.state.displayText ? <p>{this.state.displayText}</p> : null}
       {!this.state.loading && this.state.certificateObj ? <CertificateBox
         certificateObj={this.state.certificateObj}
+        qrDisplay={true}
       /> : null}
     </>
   );

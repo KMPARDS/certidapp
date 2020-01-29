@@ -66,7 +66,7 @@ export default class extends Component {
       : null}
 
       {(() => {
-        const content = (
+        let content = (
           <>
           <p className="hash">Certificate Hash: {this.props.certificateObj.certificateHash}</p>
           {this.props.certificateObj.txHashArray ? <p>Created at transaction{this.props.certificateObj.txHashArray.length > 1 ? <>s</> : null}
