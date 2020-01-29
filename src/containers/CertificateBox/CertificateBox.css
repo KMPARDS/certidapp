@@ -71,6 +71,13 @@
   background-color: #0003;
 }
 
+.certificate-box .link-black:link, .certificate-box .link-black:visited {
+  color: black;
+}
+.certificate-box .link-black:hover {
+  color: #2aa3cc;
+}
+
 #qrcode-canvas {
   /* position: fixed; */
   /* right: 17%;

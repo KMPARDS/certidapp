@@ -75,7 +75,7 @@ export default class extends Component {
             {this.props.certificateObj.txHashArray ? <p>Created at transaction{this.props.certificateObj.txHashArray.length > 1 ? <>s</> : null}
             {this.props.certificateObj.txHashArray.map(txHash => (
               <span key={'txHash-'+txHash}><br />
-                {txHash.slice(0,6)}...{txHash.slice(62)}. <a target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${txHash}`}>View on EtherScan</a></span>
+                {txHash.slice(0,6)}...{txHash.slice(62)}. <a className="link-black" target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${txHash}`}>View on EtherScan</a></span>
             ))}
             </p> : null}
               </>
