@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet } from "react-helmet";
-// import { certificateContract } from '../../env';
+import { certOrder } from '../../env';
 import CSVReader from './CSVReader';
 import CertificateBox from '../CertificateBox/CertificateBox';
 import copy from 'copy-to-clipboard';
@@ -127,38 +127,80 @@ export default class extends Component {
 
   onFileLoaded = output => {
     let errorsInCSV = '';
-    // csv rows: name, course, percentile, extraData, concatOfOtherSignatures
+    // csv rows: hex, name, subject, score, category
+    let keys = ['hex', ...certOrder];
     const certificatesToSign = output.split('\n').map((row, i) => {
-      const details = row.split(',');
-      // console.log(details);
+      const columns = row.split(',');
+      if(i === 0 && columns[0] === 'hex') {
+        keys = columns;
+        return;
+      }
       try {
-        if(details.length < 4) throw new Error('Not enough entries');
-        const nameBytes32 = window._z.stringToBytes32(details[0]);
-        const qualificationBytes32 = window._z.encodeQualification(details[1],+details[2]);
-
-        const extraData = ethers.utils.hexlify(details[3] || '0x');
-        if(extraData.length > 66) throw new Error('Extra Data Overflow, limit is 32 bytes');
-        const extraDataBytes32 = ethers.utils.hexZeroPad(extraData, 32);
-
-        if(details[4] && details[4].slice(0,2) !== '0x') throw new Error('Invalid signatures, empty the column if no signature');
-
-        const unsignedCertificate = ethers.utils.hexlify(ethers.utils.concat([
-          nameBytes32,
-          qualificationBytes32,
-          extraDataBytes32
-        ]));
-
-        return {
-          details,
-          unsignedCertificate,
-          signedCertificate: details[4] || unsignedCertificate
-        };
+        if(columns.length < 1) throw new Error('Not even 1 entry');
+        if(isNaN(+columns[3])) throw new Error(`Invalid score: ${columns[3]}`);
+        const certObj = {};
+        keys.forEach((key, i) => {
+          if(i !== 0) {
+            certObj[key] = columns[i];
+          }
+        });
+        const encodedCertificate = window._z.encodeCertificateObject(certObj);
+        // encodedCertificate.columns = columns;
+        return {encodedCertificate, columns};
       } catch (error) {
         errorsInCSV += `Error at row ${i+1}: ${error.message}\n`;
       }
     }).filter(entry => !!entry);
     console.log({certificatesToSign}, errorsInCSV);
     this.setState({ certificatesToSign, errorsInCSV });
+  }
+
+  signCSV = async() => {
+    this.setState({ csvSigning: true });
+
+    if(!window.signer) return alert('Signer not available, please connect metamask');
+
+    const arrayOfCertificatesSignedPromises = this.state.certificatesToSign.map(async obj => {
+      const signature = await window.signer.signMessage(ethers.utils.arrayify(obj.encodedCertificate.dataRLP));
+
+      const columns = [...obj.columns];
+      columns[0] = window._z.addSignaturesToCertificateRLP(columns[0] || obj.encodedCertificate.fullRLP, signature).fullRLP;
+
+      // console.log({signature, });
+
+      console.log(signature);
+      return {
+        ...obj,
+        columns
+      };
+    });
+
+    await Promise.all(arrayOfCertificatesSignedPromises);
+
+    const certificatesSigned = [];
+
+    for(const promise of arrayOfCertificatesSignedPromises) {
+      certificatesSigned.push(await promise);
+    }
+
+    console.log('certificatesSigned',certificatesSigned);
+    this.setState({ certificatesSigned, csvSigning: false });
+  };
+
+  downloadCSV = () => {
+    const keys = ['hex', ...certOrder];
+    const text = keys.join(',')+'\n'+this.state.certificatesSigned.map(c => {
+      return [
+        ...c.columns,
+      ].join(',')
+    }).join('\n');
+
+    const element = document.createElement("a");
+    const file = new Blob([text], {type: 'text/plain'});
+    element.href = URL.createObjectURL(file);
+    element.download = 'signed_certificates.csv' ;
+    document.body.appendChild(element); // Required for this to work in FireFox
+    element.click();
   }
 
   render = () => {
@@ -303,11 +345,16 @@ export default class extends Component {
               <tbody>
               {this.state.certificatesToSign.map((obj,i) => (
                 <tr key={'sign-'+i}>
-                  <td>{obj.details[0]}</td>
-                  <td>{obj.details[1]}</td>
-                  <td>{obj.details[2]}</td>
-                  <td>{obj.details[3]}</td>
-                  <td>{obj.unsignedCertificate.slice(0,8)}...({(obj.unsignedCertificate.length + obj.signedCertificate.length - 4)/2} bytes)</td>
+                  {obj.columns.map((field, j) => (
+                    <td key={'sign-field-'+j}>
+                      {field.length > 32
+                        ? (field.slice(0,2) === '0x'
+                          ? <>{field.slice(0,6)}...{field.slice(field.length - 4, field.length)} ({field.length/2} Bytes)</>
+                          : <>{field.slice(0,10)}... ({field.length} chars)</>
+                        )
+                        : <>{field}</>}
+                    </td>
+                  ))}
                 </tr>
               ))}
               </tbody>
@@ -315,56 +362,11 @@ export default class extends Component {
 
             <p>Errors: {this.state.errorsInCSV}</p>
 
-            <button className="btn" onClick={async() => {
-              this.setState({ csvSigning: true });
-
-              if(!window.signer) alert('Signer not available, please connect metamask');
-
-              const arrayOfCertificatesSignedPromises = this.state.certificatesToSign.map(async obj => {
-                const signature = await window.signer.signMessage(ethers.utils.arrayify(obj.unsignedCertificate));
-
-                console.log(signature);
-                return {
-                  ...obj,
-                  signedCertificate: ethers.utils.hexlify(ethers.utils.concat([
-                    obj.signedCertificate,
-                    signature
-                  ]))
-                };
-              });
-
-              await Promise.all(arrayOfCertificatesSignedPromises);
-
-              const certificatesSigned = [];
-
-              for(const promise of arrayOfCertificatesSignedPromises) {
-                certificatesSigned.push(await promise);
-              }
-
-              console.log('certificatesSigned',certificatesSigned);
-              this.setState({ certificatesSigned, csvSigning: false });
-            }}>{this.state.csvSigning ? 'Signing' : 'Sign'} {this.state.certificatesToSign.length} certificates{this.state.csvSigning ? '...' : null}</button>
+            <button className="btn" onClick={this.signCSV}>{this.state.csvSigning ? 'Signing' : 'Sign'} {this.state.certificatesToSign.length} certificates{this.state.csvSigning ? '...' : null}</button>
           </>}
 
           {this.state.certificatesSigned.length ? <>
-            <button className="btn" onClick={() => {
-              const text = 'Name,Course,Score,ExtraData,SignedCertificate\n'+this.state.certificatesSigned.map(c => {
-                return [
-                  c.details[0],
-                  c.details[1],
-                  c.details[2],
-                  c.details[3],
-                  c.signedCertificate
-                ].join(',')
-              }).join('\n');
-
-              const element = document.createElement("a");
-              const file = new Blob([text], {type: 'text/plain'});
-              element.href = URL.createObjectURL(file);
-              element.download = 'signed_certificates.csv' ; //"keystore.txt";
-              document.body.appendChild(element); // Required for this to work in FireFox
-              element.click();
-            }}>Download updated CSV</button>
+            <button className="btn" onClick={this.downloadCSV}>Download updated CSV</button>
           </> : null}
         </>
       );
