@@ -31,7 +31,7 @@ export default class extends Component {
     console.log(logs);
 
     this.setState({
-      recentCertificateHashes: logs.reverse().slice(0,3).map(log => log.topics[1])
+      recentCertificateHashes: logs.map(log => log.topics[1]).filter((item, i, a) => a.indexOf(item) === i).reverse().slice(0,3)
     });
 
   };
