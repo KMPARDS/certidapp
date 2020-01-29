@@ -283,9 +283,9 @@ export async function getCertificateObjFromCertificateHash(certificateHash) {
       };
     } else {
       // console.log('in else', {certificateObj, certObjExpand: addSignaturesToCertificateRLP(
-        certificateObj,
-        decoded.signatures
-      )});
+      //   certificateObj,
+      //   decoded.signatures
+      // )});
       certificateObj = {
         ...certificateObj,
         ...addSignaturesToCertificateRLP(
