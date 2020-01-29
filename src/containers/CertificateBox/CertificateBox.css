@@ -1,10 +1,21 @@
 .certificate-box {
-  border: 1px solid black;
-  box-shadow: 1px 1px 1px #eeeeee;
+  border-radius: 12.5px;
+  border: 5px solid #FFF8F3dd;
+  /* box-shadow: 1px 1px 1px #eeeeee; */
   margin: 2rem auto;
+  padding: .5rem;
+  display: block;
+  z-index: 2;
+  /* width: 95%; */
+}
+
+.certificate-container {
+  background-color: #FFF8F3dd;
+  border-radius: .3rem;
+  color: black;
+  /* margin: 2rem auto; */
   padding: 1rem 2rem;
   display: block;
-  /* width: 95%; */
 }
 
 .certificate-box .hash {
@@ -12,9 +23,21 @@
   font-size: 1.2rem;
 }
 
+.certificate-box .category {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.certificate-box .category-subtext {
+  margin-bottom: 0rem;
+}
+
 .certificate-box .name {
   font-size: 2.5rem;
   font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 0;
 }
 
 .certificate-box .score {

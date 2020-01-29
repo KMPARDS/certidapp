@@ -259,7 +259,6 @@ export default class extends Component {
             className="certificate-textinput"
             type="text"
             placeholder="Enter Subject / Course Name"
-            maxLength="30"
             onChange={event => this.setState({subject: event.target.value})}/>
         </div>
 

@@ -6,8 +6,12 @@
   height: 40vmin;
 }
 
+body {
+  background-color: #222;
+}
+
 .App-header {
-  background-color: #fff;
+  /* background-color: #222; */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -15,11 +19,28 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   font-family: 'Share Tech Mono', monospace;
-  color: #444;
+  color: #eee;
+  z-index: 1000;
 }
 
 .App-link {
   color: #09d3ac;
+}
+
+.background-lines {
+  position: fixed;
+  width: 100%;
+  z-index: -1;
+  left: 0;
+}
+
+.background-lines.top {
+  top: 0;
+}
+
+.background-lines.bottom {
+  bottom: 0;
+  /* width: 20px; */
 }
 
 .container {
@@ -30,7 +51,7 @@
 }
 
 .form-group {
-  background-color: #00000015;
+  background-color: #fff2;
   margin: 1rem 0;
   padding: 1rem;
   border-radius: .2rem;
@@ -38,6 +59,9 @@
 }
 
 .certificate-textinput {
+  background-color: #fff5;
+  color: #eee;
+  font-weight: bold;
   width:90%;
   padding: 12px 20px;
   margin: 8px 0;
@@ -49,6 +73,11 @@
   outline: none;
 }
 
+.certificate-textinput::placeholder {
+  color: #fff;
+  font-weight: normal;
+}
+
 .certificate-textinput.invalid {
   background-color: #CF000f19;
   border: 2px solid #CF000F;
@@ -56,6 +85,8 @@
 }
 
 .certificate-textarea {
+  background-color: #fff3;
+  color: #eee;
   width: 95%;
   height: 40vh;
   border-radius: .2rem;
@@ -66,6 +97,7 @@
 
 .certificate-textarea.valid {
   background-color: #00994419;
+  color: #ccead9;
   border: 2px solid #009944;
   box-shadow: 0 0 5px #009944;
   outline: none;
@@ -73,13 +105,14 @@
 
 .certificate-textarea.invalid {
   background-color: #CF000f19;
+  color: #f5cccf;
   border: 2px solid #CF000F;
   box-shadow: 0 0 5px #CF000F;
   outline: none;
 }
 
 .btn {
-  background-color: #63C0DF;
+  background-color: #2182a3;
   border: none;
   color: white;
   text-shadow: 0 0 4px #0004;
@@ -87,10 +120,8 @@
   margin: 1rem;
   text-align: center;
   text-decoration: none;
-  /* display:; */
   font-size: 16px;
   border-radius: .2rem;
-  border:1px solid #888;
   outline: none;
 }
 
@@ -108,7 +139,7 @@
 }
 
 .status-message {
-  background-color: #00000015;
+  background-color: #fff2;
   padding: .5rem;
   border-radius: .2rem;
   border:1px solid #cccccc;

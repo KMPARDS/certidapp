@@ -66,7 +66,7 @@ export default class extends Component {
       </Helmet>
       <p>Paste your signed certificate in the below box:</p>
       <textarea className={['certificate-textarea', this.state.textAreaClass].filter(className=>!!className).join(' ')} onChange={this.onTextAreaChange} />
-
+      <br />
       {this.state.parsingWait
         ? <p>Please wait parsing your certificate...</p>
         : null}

@@ -30,68 +30,70 @@ export default class extends Component {
           content="View certifications on blockchain"
         />
       </Helmet>
-      <p>Certificate of {this.props.certificateObj.parsedCertificate.category}</p>
-      <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>
-      <p><span className="subject">{this.props.certificateObj.parsedCertificate.subject}</span>
-      {this.props.certificateObj.parsedCertificate.score
-        ? <> (<span className="score">{this.props.certificateObj.parsedCertificate.score}%</span>)</>
-        : null}</p>
+      <div className="certificate-container">
+        <p className="category">Certificate of {this.props.certificateObj.parsedCertificate.category}</p>
+        <p className="category-subtext">is awarded to</p>
+        <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>
+        <p><span className="subject">{this.props.certificateObj.parsedCertificate.subject}</span>
+        {this.props.certificateObj.parsedCertificate.score
+          ? <> (<span className="score">{this.props.certificateObj.parsedCertificate.score}%</span>)</>
+          : null}</p>
 
-      {Object.keys(this.props.certificateObj.parsedCertificate).filter(key => !certOrder.includes(key)).map(key => (
-        <p key={'cert-'+key} className={key}>{this.props.certificateObj.parsedCertificate[key]}</p>
-      ))}
-
-
-      <p>{this.state.validCertificate === this.props.certificateObj.signatures.length
-        ? <>This is to certify that the above certificate information is signed by following {this.state.validCertificate} signer{this.state.validCertificate > 1 ? <>s</>:null} which is cryptographically verified by the certificate smart contract.</>
-        : (
-          0 < this.state.validCertificate
-          && this.state.validCertificate < this.props.certificateObj.signatures.length
-          ? <>Seems that this certificate is signed by only {this.state.validCertificate} valid signers out of {this.props.certificateObj.signatures.length} total signers, you can remove signatures of unauthorised signers.</>
-          : <>Seems that this certificate is not signed by any authorised signers.</>
-        )}</p>
-
-      {this.props.certificateObj.signatures.length
-      ? <>
-        {this.props.certificateObj.signatures.map((signature, i) => (
-          <SignerBox
-            key={'signer-'+i}
-            serial={i+1}
-            certificateHash={this.props.certificateObj.certificateHash}
-            signature={signature}
-            validCertificate={this.props.validCertificate || [this.state.validCertificate, newStatus => this.setState({ validCertificate: newStatus })]}
-            />
+        {Object.keys(this.props.certificateObj.parsedCertificate).filter(key => !certOrder.includes(key)).map(key => (
+          <p key={'cert-'+key} className={key}>{this.props.certificateObj.parsedCertificate[key]}</p>
         ))}
-      </>
-      : null}
 
-      {(() => {
-        let content = (
-          <>
-          <p className="hash">Certificate Hash: {this.props.certificateObj.certificateHash}</p>
-          {this.props.certificateObj.txHashArray ? <p>Created at transaction{this.props.certificateObj.txHashArray.length > 1 ? <>s</> : null}
-          {this.props.certificateObj.txHashArray.map(txHash => (
-            <span key={'txHash-'+txHash}><br />
-              {txHash.slice(0,6)}...{txHash.slice(62)}. <a target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${txHash}`}>View on EtherScan</a></span>
+
+        <p>{this.state.validCertificate === this.props.certificateObj.signatures.length
+          ? <>This is to certify that the above certificate information is signed by following {this.state.validCertificate} signer{this.state.validCertificate > 1 ? <>s</>:null} which is cryptographically verified by the certificate smart contract.</>
+          : (
+            0 < this.state.validCertificate
+            && this.state.validCertificate < this.props.certificateObj.signatures.length
+            ? <>Seems that this certificate is signed by only {this.state.validCertificate} valid signers out of {this.props.certificateObj.signatures.length} total signers, you can remove signatures of unauthorised signers.</>
+            : <>Seems that this certificate is not signed by any authorised signers.</>
+          )}</p>
+
+        {this.props.certificateObj.signatures.length
+        ? <>
+          {this.props.certificateObj.signatures.map((signature, i) => (
+            <SignerBox
+              key={'signer-'+i}
+              serial={i+1}
+              certificateHash={this.props.certificateObj.certificateHash}
+              signature={signature}
+              validCertificate={this.props.validCertificate || [this.state.validCertificate, newStatus => this.setState({ validCertificate: newStatus })]}
+              />
           ))}
-          </p> : null}
-            </>
-        );
+        </>
+        : null}
 
-        if(this.props.qrDisplay) {
-          content = (
-            <div className="row">
-              <div className="column1">
-                {content}
-              </div>
-              <div className="column2"><canvas id="qrcode-canvas" /></div>
-            </div>
+        {(() => {
+          let content = (
+            <>
+            <p className="hash">Certificate Hash: {this.props.certificateObj.certificateHash}</p>
+            {this.props.certificateObj.txHashArray ? <p>Created at transaction{this.props.certificateObj.txHashArray.length > 1 ? <>s</> : null}
+            {this.props.certificateObj.txHashArray.map(txHash => (
+              <span key={'txHash-'+txHash}><br />
+                {txHash.slice(0,6)}...{txHash.slice(62)}. <a target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${txHash}`}>View on EtherScan</a></span>
+            ))}
+            </p> : null}
+              </>
           );
-        }
 
-        return content;
-      })()}
+          if(this.props.qrDisplay) {
+            content = (
+              <div className="row">
+                <div className="column1">
+                  {content}
+                </div>
+                <div className="column2"><canvas id="qrcode-canvas" /></div>
+              </div>
+            );
+          }
 
+          return content;
+        })()}
+      </div>
     </div>
   );
 }
