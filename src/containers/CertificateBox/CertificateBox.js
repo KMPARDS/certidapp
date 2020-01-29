@@ -31,6 +31,7 @@ export default class extends Component {
         />
       </Helmet>
       <div className="certificate-container">
+        {this.props.preview ? <p className="preview">Note: This is only a preview of the certificate, please register the certificate.</p> : null}
         <p className="category">Certificate of {this.props.certificateObj.parsedCertificate.category}</p>
         <p className="category-subtext">is awarded to</p>
         <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>

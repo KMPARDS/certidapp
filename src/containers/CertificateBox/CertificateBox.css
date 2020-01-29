@@ -18,6 +18,11 @@
   display: block;
 }
 
+.certificate-box .preview {
+  color: #CF000F;
+  font-size: 1.2rem;
+}
+
 .certificate-box .hash {
   word-break: break-all;
   font-size: 1.2rem;

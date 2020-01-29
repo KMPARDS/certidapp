@@ -78,6 +78,7 @@ export default class extends Component {
             certificateObj={this.state.certificateObj}
             qrDisplay={false}
             validCertificate={[this.state.validCertificate, newStatus => this.setState({ validCertificate: newStatus })]}
+            preview={true}
             />
         </>
         : null}
