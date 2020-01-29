@@ -19,11 +19,16 @@ export default class extends Component {
     const certifyingAuthority = await window.certificateContractInstance.certifyingAuthorities(signerAddress);
     // console.log('certifyingAuthority', certifyingAuthority);
 
-    const caObj = window._z.decodeCertifyingAuthority(certifyingAuthority.data);
+    let caObj;
+    if(certifyingAuthority.data !== '0x') {
+      caObj = window._z.decodeCertifyingAuthority(certifyingAuthority.data);
+    } else {
+      caObj = { name: null, website: null };
+    }
 
     this.setState({
       name: caObj.name,
-      website: window._z.toWebsiteURL(caObj.website),
+      website: caObj.website ? window._z.toWebsiteURL(caObj.website) : null,
       isAuthorised: certifyingAuthority.isAuthorised,
       loading: false
     });
@@ -50,7 +55,7 @@ export default class extends Component {
 
     return (
       <div className={['signer-box', signerAuthorisedClass].filter(className=>!!className).join(' ')}>
-        <p>Signer {this.props.serial}: {this.state.name ? <>{this.state.name}({this.state.signerAddress.slice(0,6)}...{this.state.signerAddress.slice(38)})</> : (this.state.signerAddress ? <>{this.state.signerAddress}</> : <>Computing address...</>)}</p>
+        <p>Signer {this.props.serial}: {this.state.name ? <>{this.state.name}{this.state.website ? <a href={this.state.website} rel="noopenner noreferrer" target="_blank" style={{textDecoration: 'none'}}>↗️</a> : null} ({this.state.signerAddress.slice(0,6)}...{this.state.signerAddress.slice(38)})</> : (this.state.signerAddress ? <>{this.state.signerAddress}</> : <>Computing address...</>)}</p>
         <p>Signature: {this.props.signature.slice(0,10)}...{this.props.signature.slice(122)}</p>
       </div>
     );
