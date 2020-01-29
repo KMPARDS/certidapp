@@ -92,6 +92,11 @@ export function isProperValue(input) {
   return ![undefined, null, NaN].includes(input);
 }
 
+export function isFullRLP(certificateHex) {
+  const decoded = ethers.utils.RLP.decode(certificateHex);
+  return typeof decoded[0] !== 'string';
+}
+
 export function getCertificateHashFromDataRLP(certificateDataRLP) {
   const digest = ethers.utils.hexlify(ethers.utils.concat([ethers.utils.toUtf8Bytes('\x19Ethereum Signed Message:\n'+(certificateDataRLP.length/2 - 1)),certificateDataRLP]));
   return ethers.utils.keccak256(digest);
@@ -156,7 +161,7 @@ export function addSignaturesToCertificateRLP(encodedFullCertificate, signature 
     }
   } else {
     const decoded = ethers.utils.RLP.decode(encodedFullCertificate);
-    certificateData = decoded[0];
+    certificateData = isFullRLP(encodedFullCertificate) ? decoded[0] : decoded;
     if(decoded.length > 1) {
       signatureArray = [...decoded.slice(1), ...signatureArray];
     }

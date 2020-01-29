@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Helmet } from "react-helmet";
 // import { certificateContract } from '../../env';
 import CSVReader from './CSVReader';
+import CertificateBox from '../CertificateBox/CertificateBox';
 import copy from 'copy-to-clipboard';
 
 const ethers = require('ethers');
@@ -20,7 +21,7 @@ export default class extends Component {
     subject: '',
     score: '',
     category: '',
-    encodedCertificate: '',
+    certificateHex: null,
     copied: false,
     authorityName: '',
     isAuthorised: true,
@@ -63,7 +64,7 @@ export default class extends Component {
     clearInterval(this.intervalId);
   }
 
-  signThisCertificate = async() => {
+  signNewCertificate = async() => {
     try {
       let encodedCertificate = window._z.encodeCertificateObject({
         name: this.state.name,
@@ -86,11 +87,20 @@ export default class extends Component {
     }
   };
 
+  signEncodedCertificate = async() => {
+    const encoded = window._z.encodeCertificateObject(this.state.certificateObj.parsedCertificate);
+
+    const signature = await window.signer.signMessage(ethers.utils.arrayify(encoded.dataRLP));
+
+    const certificateHex = window._z.addSignaturesToCertificateRLP(this.state.certificateString, signature).fullRLP;
+    this.setState({ certificateHex });
+  }
+
   onTextAreaChange = event => {
     const spacesRemoved = event.target.value.split(' ').join('').split('\n').join('');
     // console.log(spacesRemoved);
     try {
-      const certificateObj = window._z.parseCertificate(spacesRemoved);
+      const certificateObj = window._z.decodeCertificateData(spacesRemoved);
 
       this.setState({
         certificateString: spacesRemoved,
@@ -229,16 +239,41 @@ export default class extends Component {
             onChange={event => this.setState({category: event.target.value})}/>
         </div>
 
-        <button className="btn" onClick={this.signThisCertificate}>Sign this Certificate</button>
+        <button className="btn" onClick={this.signNewCertificate}>Sign this Certificate</button>
         </>}
         </>
       );
     } else if(this.state.currentScreen === CURRENT_PAGE_ENUM.SIGN_ENCODED_CERTIFICATE) {
       screen = (
         <>
+        {this.state.certificateHex
+          ? <>
+          <p>Below is the signed certificate hex string. Send this hex string to certifiee and they can paste it in the 'Register Certificate' box on this ÐApp.</p>
+          <p style={{wordBreak:'break-all'}}>{this.state.certificateHex}</p>
+          <p style={{cursor: 'pointer'}} onClick={() => {
+            copy(this.state.certificateHex);
+            !this.state.copied && setTimeout(() => {
+              this.setState({ copied: false });
+            }, 1000);
+            this.setState({ copied: true });
+          }}>{this.state.copied ? '[ Copied! ]' : '[ Copy To Clipboard ]'}</p>
+          </>
+          : <>
         {header}
         <p>Paste an unsigned or signed certificate in the below box:</p>
         <textarea className={['certificate-textarea', this.state.textAreaClass].filter(className=>!!className).join(' ')} onChange={this.onTextAreaChange} />
+        {this.state.certificateObj
+          ? <>
+            <p>Your certificate preview:</p>
+            <CertificateBox
+              certificateObj={this.state.certificateObj}
+              qrDisplay={false}
+              validCertificate={[this.state.validCertificate, newStatus => this.setState({ validCertificate: newStatus })]}
+              />
+          </>
+          : null}
+          <button className="btn" onClick={this.signEncodedCertificate}>Sign this Certificate with your private key</button>
+        </>}
         </>
       );
     } else if(this.state.currentScreen === CURRENT_PAGE_ENUM.SIGN_CSV) {
