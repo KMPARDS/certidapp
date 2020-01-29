@@ -55,7 +55,7 @@ export function bytify(input, type) {
       const numberOfDecimals = (String(input).split('.')[1] || '').length;
       const decimalByte = bytify(numberOfDecimals, 'number').slice(2);
       if(decimalByte.length !== 2) throw new Error(`Invalid decimal byte: (${decimalByte})`);
-      const numberWithoutDecimals = input * 10**numberOfDecimals;
+      const numberWithoutDecimals = Math.round(input * 10**numberOfDecimals);
       const numberBytes = bytify(numberWithoutDecimals, 'number').slice(2);
       return '0x' + decimalByte + numberBytes;
     case 'string':
