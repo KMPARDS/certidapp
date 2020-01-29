@@ -147,6 +147,7 @@ export function encodeCertificateObject(obj, signature = []) {
 export function addSignaturesToCertificateRLP(encodedFullCertificate, signature = []) {
   let signatureArray = typeof signature === 'object' ? signature : [signature];
   let certificateData;
+  // console.log('in addsig',{encodedFullCertificate, signature});
   if(typeof encodedFullCertificate === 'object') {
     if(encodedFullCertificate.dataRLP) {
       certificateData = ethers.utils.RLP.decode(encodedFullCertificate.dataRLP);
@@ -270,23 +271,32 @@ export async function getCertificateObjFromCertificateHash(certificateHash) {
   for(const log of logs) {
     const txHash = log.transactionHash;
     const transaction = await window.provider.getTransaction(txHash);
-    const decoded = window.certificateContractInstance.interface.decodeFunctionData('registerCertificate(bytes)',transaction.data)[0];
+    const arg = window.certificateContractInstance.interface.decodeFunctionData('registerCertificate(bytes)',transaction.data)[0];
+
+    const decoded = decodeCertificateData(arg);
+    // console.log({decoded, arg})
 
     if(!certificateObj) {
       certificateObj = {
-        fullRLP: decoded,
-        ...decodeCertificateData(decoded)
+        fullRLP: arg,
+        ...decoded
       };
     } else {
+      // console.log('in else', {certificateObj, certObjExpand: addSignaturesToCertificateRLP(
+        certificateObj,
+        decoded.signatures
+      )});
       certificateObj = {
         ...certificateObj,
         ...addSignaturesToCertificateRLP(
           certificateObj,
-          decodeCertificateData(decoded).signatures
-        )
+          decoded.signatures
+        ),
+        signatures: decoded.signatures
       };
     }
 
+    // console.log({certificateObj});
     txHashArray.push(txHash);
   }
 
