@@ -21,6 +21,7 @@ export default class extends Component {
     subject: '',
     score: '',
     category: '',
+    errorMessage: '',
     certificateHex: null,
     copied: false,
     authorityName: '',
@@ -65,6 +66,7 @@ export default class extends Component {
   }
 
   signNewCertificate = async() => {
+    this.setState({ errorMessage: '' });
     try {
       let encodedCertificate = window._z.encodeCertificateObject({
         name: this.state.name,
@@ -84,6 +86,7 @@ export default class extends Component {
       // console.log('signed',ethers.utils.hexlify(signedCertificateConcat));
     } catch (error) {
       console.error(error.message);
+      this.setState({ errorMessage: error.message })
     }
   };
 
@@ -279,6 +282,8 @@ export default class extends Component {
             placeholder="e.g. Participation / Merit / Appreciation"
             onChange={event => this.setState({category: event.target.value})}/>
         </div>
+
+        {this.state.errorMessage ? <p className="error-message">{this.state.errorMessage}</p> : null}
 
         <button className="btn" onClick={this.signNewCertificate}>Sign this Certificate</button>
         </>}
