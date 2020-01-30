@@ -10,7 +10,8 @@ export default class extends Component {
     parsingWait: false,
     certificateObj: null,
     validCertificate: null,
-    txStatus: TX_STATUS_ENUM.NOT_INITIATED
+    txStatus: TX_STATUS_ENUM.NOT_INITIATED,
+    errorMessage: ''
   };
 
   timeoutId = null;
@@ -45,14 +46,18 @@ export default class extends Component {
   }
 
   onRegister = async() => {
-    this.setState({ txStatus: TX_STATUS_ENUM.SIGNING });
-    const tx = await window.certificateContractInstance.functions.registerCertificate(this.state.certificateString);
-    this.setState({ txStatus: TX_STATUS_ENUM.WAITING_FOR_CONFIRMATION });
-    await tx.wait();
-    this.setState({ txStatus: TX_STATUS_ENUM.CONFIRMED });
-    setTimeout(() => {
-      this.props.history.push(`view-certificate/${this.state.certificateObj.certificateHash}`);
-    },1000);
+    this.setState({ txStatus: TX_STATUS_ENUM.SIGNING, errorMessage: '' });
+    try {
+      const tx = await window.certificateContractInstance.functions.registerCertificate(this.state.certificateString);
+      this.setState({ txStatus: TX_STATUS_ENUM.WAITING_FOR_CONFIRMATION });
+      await tx.wait();
+      this.setState({ txStatus: TX_STATUS_ENUM.CONFIRMED });
+      setTimeout(() => {
+        this.props.history.push(`view-certificate/${this.state.certificateObj.certificateHash}`);
+      },1000);
+    } catch (error) {
+      this.setState({ txStatus: TX_STATUS_ENUM.NOT_INITIATED, errorMessage: error.message });
+    }
   }
 
   render = () => (
@@ -79,6 +84,7 @@ export default class extends Component {
             qrDisplay={false}
             validCertificate={[this.state.validCertificate, newStatus => this.setState({ validCertificate: newStatus })]}
             preview={true}
+            history={this.props.history}
             />
         </>
         : null}
@@ -89,9 +95,11 @@ export default class extends Component {
         </>
         : <></>}
 
+        {this.state.errorMessage ? <p className="error-message">{this.state.errorMessage}</p> : null}
+
         <button
           className="btn"
-          disabled={this.state.txStatus !== TX_STATUS_ENUM.NOT_INITIATED || this.state.validCertificate !== (this.state.certificateObj && this.state.certificateObj.signatures.length)}
+          disabled={this.state.txStatus !== TX_STATUS_ENUM.NOT_INITIATED || this.state.validCertificate !== (this.state.certificateObj && this.state.certificateObj.signatures && this.state.certificateObj.signatures.length)}
           onClick={this.onRegister}
         >
           {(() => {
