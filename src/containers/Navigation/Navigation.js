@@ -28,19 +28,23 @@ export default class extends Component {
       }
     }, 100);
 
-    setInterval(() => {
-      const isManager = !!window.web3 && !!window.web3.currentProvider && !!this.state.managerAddress && this.state.managerAddress.toLowerCase() === window.web3.currentProvider.selectedAddress.toLowerCase();
-      if(isManager !== this.state.isManager) {
-        this.setState({ isManager });
-      }
-
-      const navigationGroup = document.querySelector('.navigation-group');
-      if(navigationGroup) {
-        if(navigationGroup.offsetHeight > 56) {
-          this.setState({ displayHideButton: true });
-        } else {
-          this.setState({ displayHideButton: !this.state.showAllItems });
+    const intervalId2 = setInterval(() => {
+      try {
+        const isManager = !!window.web3 && !!window.web3.currentProvider && !!this.state.managerAddress && this.state.managerAddress.toLowerCase() === window.web3.currentProvider.selectedAddress.toLowerCase();
+        if(isManager !== this.state.isManager) {
+          this.setState({ isManager });
         }
+
+        const navigationGroup = document.querySelector('.navigation-group');
+        if(navigationGroup) {
+          if(navigationGroup.offsetHeight > 56) {
+            this.setState({ displayHideButton: true });
+          } else {
+            this.setState({ displayHideButton: !this.state.showAllItems });
+          }
+        }
+      } catch (error) {
+        clearInterval(intervalId2);
       }
     }, 100);
   };

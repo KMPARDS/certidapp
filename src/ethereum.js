@@ -36,15 +36,13 @@ const setUpMetamask = () => {
   }
 };
 
-if(window.ethereum) {
-  setUpMetamask();
-} else {
-  window.certificateContractInstance = new ethers.Contract(
-    certificateContract.address,
-    certificateContract.abi,
-    ethers.getDefaultProvider(network)
-  );
+window.certificateContractInstance = new ethers.Contract(
+  certificateContract.address,
+  certificateContract.abi,
+  ethers.getDefaultProvider(network)
+);
 
+if(window.ethereum) {
   const intervalId = setInterval(() => {
     if(setUpMetamask()) {
       console.log('Metamask setup done!');
@@ -52,6 +50,8 @@ if(window.ethereum) {
     }
   }, 100);
 }
+
+
 
 
 // export { networkId, certificateContractInstance };
