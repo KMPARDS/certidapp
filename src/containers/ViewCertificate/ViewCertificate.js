@@ -91,7 +91,7 @@ export default class extends Component {
         ? <div className="form-group">
         <p>Recent certificates issued...</p>
         {this.state.recentCertificateHashes.map((hash,i) => (
-          <p key={`recent-certificates-${hash}`}>{hash}</p>
+          <p key={`recent-certificates-${hash}`} className="mono">{hash}</p>
         ))}
       </div> : null}
     </>

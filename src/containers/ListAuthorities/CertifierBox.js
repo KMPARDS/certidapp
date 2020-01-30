@@ -20,7 +20,7 @@ export default class extends Component {
 
   render = () => (
     <>
-      <div className="form-group">
+      <div className="form-group mono">
         {this.state.data ? <>
           {Object.entries(this.state.data).map((entry, i) => (
             <p key={'ca-property-'+i}>{window._z.toTitleCase(entry[0])}: {entry[0] === 'website' ? <a className="link" href={window._z.toWebsiteURL(entry[1])} rel="noopenner noreferrer" target="_blank">{entry[1]}</a> : <>{entry[1]}</>}</p>

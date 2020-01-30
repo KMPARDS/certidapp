@@ -18,9 +18,14 @@ body {
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  font-family: 'Share Tech Mono', monospace;
+  /* font-family: 'Share Tech Mono', monospace; */
+  font-family: 'Share Tech', monospace;
   color: #eee;
   z-index: 1000;
+}
+
+.mono {
+  font-family: 'Share Tech Mono', monospace;
 }
 
 .App-link {
@@ -60,6 +65,7 @@ body {
 
 .certificate-textinput {
   background-color: #fff5;
+  font-family: 'Share Tech Mono', monospace;
   color: #eee;
   font-weight: bold;
   width:90%;

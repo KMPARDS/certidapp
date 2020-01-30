@@ -55,8 +55,8 @@ export default class extends Component {
 
     return (
       <div className={['signer-box', signerAuthorisedClass].filter(className=>!!className).join(' ')}>
-        <p>Signer {this.props.serial}: {this.state.name ? <>{this.state.name}{this.state.website ? <a href={this.state.website} rel="noopenner noreferrer" target="_blank" style={{textDecoration: 'none'}}>↗️</a> : null} ({this.state.signerAddress.slice(0,6)}...{this.state.signerAddress.slice(38)})</> : (this.state.signerAddress ? <>{this.state.signerAddress}</> : <>Computing address...</>)}</p>
-        <p>Signature: {this.props.signature.slice(0,10)}...{this.props.signature.slice(122)}</p>
+        <p>Signer {this.props.serial}: {this.state.name ? <><span className="mono">{this.state.name}</span>{this.state.website ? <a href={this.state.website} rel="noopenner noreferrer" target="_blank" style={{textDecoration: 'none'}}>↗️</a> : null} (<span className="mono">{this.state.signerAddress.slice(0,6)}</span>...<span className="mono">{this.state.signerAddress.slice(38)}</span>)</> : (this.state.signerAddress ? <><span className="mono">{this.state.signerAddress}</span></> : <>Computing address...</>)}</p>
+        <p>Signature: <span className="mono">{this.props.signature.slice(0,10)}</span>...<span className="mono">{this.props.signature.slice(122)}</span></p>
       </div>
     );
   }

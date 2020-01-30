@@ -32,10 +32,10 @@ export default class extends Component {
       </Helmet>
       <div className="certificate-container">
         {this.props.preview ? <p className="preview">Note: This is only a preview of the certificate, please register the certificate.</p> : null}
-        <p className="category">Certificate of <span className="category">{this.props.certificateObj.parsedCertificate.category}</span></p>
+        <p className="category">Certificate of <span className="category mono">{this.props.certificateObj.parsedCertificate.category}</span></p>
         <p className="category-subtext">is awarded to</p>
-        <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>
-        <p>For acheiving <span className="score">{this.props.certificateObj.parsedCertificate.score}%</span> {this.props.certificateObj.parsedCertificate.category} in <span className="subject">{this.props.certificateObj.parsedCertificate.subject}</span></p>
+        <p className="name mono">{this.props.certificateObj.parsedCertificate.name}</p>
+        <p>For acheiving <span className="score mono">{this.props.certificateObj.parsedCertificate.score}%</span> <span className="mono">{this.props.certificateObj.parsedCertificate.category}</span> in <span className="subject mono">{this.props.certificateObj.parsedCertificate.subject}</span></p>
 
         {Object.keys(this.props.certificateObj.parsedCertificate).filter(key => !certOrder.includes(key)).map(key => (
           <p key={'cert-'+key} className={key}>{this.props.certificateObj.parsedCertificate[key]}</p>
@@ -43,7 +43,8 @@ export default class extends Component {
 
 
         <p>{this.state.validCertificate === this.props.certificateObj.signatures.length
-          ? <>The above certificate information is signed by following {this.state.validCertificate} signer{this.state.validCertificate > 1 ? <>s</>:null} which is cryptographically verified by the certificate smart contract.</>
+          ? <>The above certificate information is signed by following <span className="mono">{this.state.validCertificate}</span> <span className="mono">signer{this.state.validCertificate > 1 ? <>s</>:null}
+          </span> which is cryptographically verified by the certificate smart contract.</>
           : (
             0 < this.state.validCertificate
             && this.state.validCertificate < this.props.certificateObj.signatures.length
@@ -68,11 +69,11 @@ export default class extends Component {
         {(() => {
           let content = (
             <>
-            <p className="hash">Certificate Hash: {this.props.certificateObj.certificateHash}</p>
+            <p className="hash">Certificate Hash: <span className="mono">{this.props.certificateObj.certificateHash}</span></p>
             {this.props.certificateObj.txHashArray ? <p>Created at transaction{this.props.certificateObj.txHashArray.length > 1 ? <>s</> : null}
             {this.props.certificateObj.txHashArray.map(txHash => (
               <span key={'txHash-'+txHash}><br />
-                {txHash.slice(0,6)}...{txHash.slice(62)}. <a className="link-black" target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${txHash}`}>View on EtherScan</a></span>
+                <span className="mono">{txHash.slice(0,6)}</span>...<span className="mono">{txHash.slice(62)}</span>. <a className="link-black" target="_blank" rel="noopenner noreferrer" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/tx/${txHash}`}>View on EtherScan</a></span>
             ))}
             </p> : null}
               </>
