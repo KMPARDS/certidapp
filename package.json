@@ -1,6 +1,6 @@
 {
   "name": "certificate-ui",
-  "homepage": "/boa/",
+  "homepage": "/certidapp/",
   "version": "0.1.1",
   "private": true,
   "dependencies": {
