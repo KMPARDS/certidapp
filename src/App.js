@@ -27,8 +27,8 @@ require('./ethereum');
 const App = props => (
   <Router history={history}>
     <div className="App">
-      <img className="background-lines top" src='/cert-background-lines.png' />
-      <img className="background-lines bottom" src='/cert-background-lines2.png' />
+      <img className="background-lines top" src='cert-background-lines.png' />
+      <img className="background-lines bottom" src='cert-background-lines2.png' />
       <header className="App-header">
         <Navigation />
         <div className="container">
