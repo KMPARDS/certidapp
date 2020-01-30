@@ -32,6 +32,7 @@
   font-size: 3rem;
   font-weight: bold;
   margin-bottom: 1.5rem;
+  /* text-decoration: underline; */
 }
 
 .certificate-box .category-subtext {
@@ -39,13 +40,19 @@
 }
 
 .certificate-box .name {
-  font-size: 2.5rem;
+  font-size: 2.7rem;
   font-weight: bold;
   margin-top: 1.5rem;
   margin-bottom: 0;
 }
 
 .certificate-box .score {
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+.certificate-box .subject {
+  font-size: 1.7rem;
   font-weight: bold;
 }
 
@@ -78,12 +85,20 @@
   color: #2aa3cc;
 }
 
+.qrcode-canvas-container {
+  display: inline-block;
+  background-color: white;
+  border-radius: 5px;
+  padding: .5rem;
+}
+
 #qrcode-canvas {
   /* position: fixed; */
   /* right: 17%;
   top: 32.5%; */
   width: min(20vw, 20vh) !important;
   height: min(20vw, 20vh) !important;
+  margin: 0;
 }
 
 /* Clear floats after the columns */

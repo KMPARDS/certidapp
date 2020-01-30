@@ -32,13 +32,10 @@ export default class extends Component {
       </Helmet>
       <div className="certificate-container">
         {this.props.preview ? <p className="preview">Note: This is only a preview of the certificate, please register the certificate.</p> : null}
-        <p className="category">Certificate of {this.props.certificateObj.parsedCertificate.category}</p>
+        <p className="category">Certificate of <span className="category">{this.props.certificateObj.parsedCertificate.category}</span></p>
         <p className="category-subtext">is awarded to</p>
         <p className="name">{this.props.certificateObj.parsedCertificate.name}</p>
-        <p><span className="subject">{this.props.certificateObj.parsedCertificate.subject}</span>
-        {this.props.certificateObj.parsedCertificate.score
-          ? <> (<span className="score">{this.props.certificateObj.parsedCertificate.score}%</span>)</>
-          : null}</p>
+        <p>For acheiving <span className="score">{this.props.certificateObj.parsedCertificate.score}%</span> {this.props.certificateObj.parsedCertificate.category} in <span className="subject">{this.props.certificateObj.parsedCertificate.subject}</span></p>
 
         {Object.keys(this.props.certificateObj.parsedCertificate).filter(key => !certOrder.includes(key)).map(key => (
           <p key={'cert-'+key} className={key}>{this.props.certificateObj.parsedCertificate[key]}</p>
@@ -46,7 +43,7 @@ export default class extends Component {
 
 
         <p>{this.state.validCertificate === this.props.certificateObj.signatures.length
-          ? <>This is to certify that the above certificate information is signed by following {this.state.validCertificate} signer{this.state.validCertificate > 1 ? <>s</>:null} which is cryptographically verified by the certificate smart contract.</>
+          ? <>The above certificate information is signed by following {this.state.validCertificate} signer{this.state.validCertificate > 1 ? <>s</>:null} which is cryptographically verified by the certificate smart contract.</>
           : (
             0 < this.state.validCertificate
             && this.state.validCertificate < this.props.certificateObj.signatures.length
@@ -87,7 +84,11 @@ export default class extends Component {
                 <div className="column1">
                   {content}
                 </div>
-                <div className="column2"><canvas id="qrcode-canvas" /></div>
+                <div className="column2">
+                  <div className="qrcode-canvas-container">
+                  <canvas id="qrcode-canvas" />
+                  </div>
+                </div>
               </div>
             );
           }
