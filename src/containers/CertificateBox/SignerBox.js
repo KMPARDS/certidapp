@@ -10,7 +10,7 @@ export default class extends Component {
     name: null,
     website: null,
     isAuthorised: null,
-    logo: null
+    image: null
   };
 
   componentDidMount = async() => {
@@ -31,7 +31,7 @@ export default class extends Component {
       name: caObj.name,
       website: caObj.website ? window._z.toWebsiteURL(caObj.website) : null,
       isAuthorised: certifyingAuthority.isAuthorised,
-      logo: caObj.logo || null,
+      image: caObj.image || null,
       loading: false
     });
 
@@ -64,9 +64,9 @@ export default class extends Component {
 
     return (
       <div className={['signer-box', signerAuthorisedClass].filter(className=>!!className).join(' ')}>
-        {this.state.logo ? <div className="row" style={{display:'inline-block', width:'80%'}}>
+        {this.state.image ? <div className="row" style={{display:'inline-block', width:'80%'}}>
           <div className="column2" style={{textAlign: 'right'}}>
-            <img className="certificate-signer-img" src={'https://ipfs.infura.io/ipfs/'+this.state.logo} />
+            <img className="certificate-signer-img" src={'https://ipfs.infura.io/ipfs/'+this.state.image} />
           </div>
           <div className="column1">
             <div style={{textAlign: 'left', marginLeft: '1rem'}}>

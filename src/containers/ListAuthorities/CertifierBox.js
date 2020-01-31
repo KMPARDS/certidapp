@@ -36,9 +36,9 @@ export default class extends Component {
     return (
       <>
         <div className="form-group mono row">
-          {this.state.obj && this.state.obj.logo ? <div>
+          {this.state.obj && this.state.obj.image ? <div>
             <div className="column2">
-              <img src={'https://ipfs.infura.io/ipfs/'+this.state.obj.logo} />
+              <img src={'https://ipfs.infura.io/ipfs/'+this.state.obj.image} />
             </div>
             <div className="column1" style={{textAlign: 'left'}}>
               <div style={{marginLeft: '1rem'}}>

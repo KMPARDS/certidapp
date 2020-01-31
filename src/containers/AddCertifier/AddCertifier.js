@@ -8,7 +8,7 @@ export default class extends Component {
     address: '',
     name: '',
     website: '',
-    logo: '',
+    image: '',
     errorMessage: '',
     statusMessage: ''
   };
@@ -20,7 +20,7 @@ export default class extends Component {
       const encoded = window._z.encodeCertifyingAuthority({
         name: this.state.name,
         website: this.state.website.split(' ').join(''),
-        logo: this.state.logo
+        image: this.state.image
       });
 
       const tx = await window.certificateContractInstance.functions.addCertifyingAuthority(
@@ -82,8 +82,8 @@ export default class extends Component {
           className="certificate-textinput"
           type="text"
           placeholder="IPFS Hash of Logo"
-          onChange={event => this.setState({logo: event.target.value})}/>
-        {this.state.logo ? <img src={`https://ipfs.infura.io/ipfs/${this.state.logo}`} /> : null}
+          onChange={event => this.setState({image: event.target.value})}/>
+        {this.state.image ? <img src={`https://ipfs.infura.io/ipfs/${this.state.image}`} /> : null}
       </div>
 
       {this.state.errorMessage ? <p className="error-message">Error: {this.state.errorMessage}</p> : null}

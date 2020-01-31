@@ -10,7 +10,7 @@ const env = {
   certOrder: ['name', 'subject', 'score', 'category'],
   authOrder: ['name', 'website'],
   extraDataTypes: {
-    'logo': 'base58'
+    image: 'base58'
   },
   managerAddress: '0xc8e1f3b9a0cdfcef9ffd2343b943989a22517b26',
   TX_STATUS_ENUM: {
