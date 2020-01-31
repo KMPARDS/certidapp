@@ -1,6 +1,7 @@
-import { dataTypes, certOrder, authOrder, certificateContract } from './env';
+import { dataTypes, certOrder, authOrder, extraDataTypes, certificateContract } from './env';
 
 const ethers = require('ethers');
+const bs58 = require('bs58');
 
 export function bytesToString(bytes) {
   return ethers.utils.toUtf8String(bytes).split('\u0000').join('');
@@ -62,6 +63,8 @@ export function bytify(input, type) {
       return ethers.utils.hexlify(ethers.utils.toUtf8Bytes(input));
     case 'boolean':
       return input ? '0x01' : '0x00';
+    case 'base58':
+      return '0x'+bs58.decode(input).toString('hex');
     default:
       return null;
   }
@@ -83,6 +86,9 @@ export function renderBytes(hex, type) {
       return bytesToString(hex);
     case 'boolean':
       return !!(+hex);
+    case 'base58':
+      if(hex.slice(0,2) === '0x') hex = hex.slice(2);
+      return bs58.encode(Buffer.from(hex, 'hex'));
     default:
       return hex;
   }
@@ -129,8 +135,10 @@ export function encodeCertificateObject(obj, signature = []) {
     certRLPArray.push('');
     const datatypeIndex = certRLPArray.length - 1;
     extraData.forEach(property => {
-      certRLPArray[datatypeIndex] = certRLPArray[datatypeIndex] + getDataTypeHexByte(guessDataTypeFromInput(property[1]));
-      certRLPArray.push([bytify(property[0]), bytify(property[1])]);
+      const dataType = extraDataTypes[property[0]] || guessDataTypeFromInput(property[1]);
+      certRLPArray[datatypeIndex] = certRLPArray[datatypeIndex]
+        + getDataTypeHexByte(dataType);
+      certRLPArray.push([bytify(property[0]), bytify(property[1], dataType)]);
     });
 
     if(certRLPArray[datatypeIndex].length % 2) {
@@ -231,8 +239,10 @@ export function encodeCertifyingAuthority(obj) {
     rlpArray.push('');
     const datatypeIndex = rlpArray.length - 1;
     extraData.forEach(property => {
-      rlpArray[datatypeIndex] = rlpArray[datatypeIndex] + getDataTypeHexByte(guessDataTypeFromInput(property[1]));
-      rlpArray.push([bytify(property[0]), bytify(property[1])]);
+      const dataType = extraDataTypes[property[0]] || guessDataTypeFromInput(property[1]);
+      rlpArray[datatypeIndex] = rlpArray[datatypeIndex]
+        + getDataTypeHexByte(dataType);
+      rlpArray.push([bytify(property[0]), bytify(property[1], dataType)]);
     });
 
     if(rlpArray[datatypeIndex].length % 2) {

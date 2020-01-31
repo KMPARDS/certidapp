@@ -61,6 +61,7 @@
   background-color: #0002;
   padding: 1rem;
   margin: 1rem 0;
+  border-radius: .25rem;
 }
 
 .certificate-box .signer-box.valid {
@@ -85,6 +86,13 @@
   color: #2aa3cc;
 }
 
+.certificate-box .signer-box .certificate-signer-img {
+  display: inline;
+  height: 4.5rem;
+  margin: 1em 0;
+}
+
+
 .qrcode-canvas-container {
   display: inline-block;
   background-color: white;
@@ -99,20 +107,4 @@
   width: min(20vw, 20vh) !important;
   height: min(20vw, 20vh) !important;
   margin: 0;
-}
-
-/* Clear floats after the columns */
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
-}
-
-.column1 {
-  float: left;
-  width: 75%;
-}
-.column2 {
-  float: left;
-  width: 25%;
 }

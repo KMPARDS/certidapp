@@ -8,6 +8,7 @@ export default class extends Component {
     address: '',
     name: '',
     website: '',
+    logo: '',
     errorMessage: '',
     statusMessage: ''
   };
@@ -18,7 +19,8 @@ export default class extends Component {
       const address = ethers.utils.getAddress(this.state.address);
       const encoded = window._z.encodeCertifyingAuthority({
         name: this.state.name,
-        website: this.state.website
+        website: this.state.website.split(' ').join(''),
+        logo: this.state.logo
       });
 
       const tx = await window.certificateContractInstance.functions.addCertifyingAuthority(
@@ -72,6 +74,16 @@ export default class extends Component {
           type="text"
           placeholder="Certifier Website"
           onChange={event => this.setState({website: event.target.value})}/>
+      </div>
+
+      <div className="form-group">
+        <p>Enter IPFS Hash of Logo of Certifying Authority (optional):</p>
+        <input
+          className="certificate-textinput"
+          type="text"
+          placeholder="IPFS Hash of Logo"
+          onChange={event => this.setState({logo: event.target.value})}/>
+        {this.state.logo ? <img src={`https://ipfs.infura.io/ipfs/${this.state.logo}`} /> : null}
       </div>
 
       {this.state.errorMessage ? <p className="error-message">Error: {this.state.errorMessage}</p> : null}

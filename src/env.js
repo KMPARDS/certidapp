@@ -6,9 +6,12 @@ const env = {
     address: '0x34AEA1D67C5484133BeE0E60aEbB9882a772f64B',
     abi: certificateStorageJSON.abi
   },
-  dataTypes: [null, 'bytes', 'number', 'float', 'string', 'boolean', 'image', 'date'],
+  dataTypes: [null, 'bytes', 'number', 'float', 'string', 'boolean', 'base58', 'date'],
   certOrder: ['name', 'subject', 'score', 'category'],
   authOrder: ['name', 'website'],
+  extraDataTypes: {
+    'logo': 'base58'
+  },
   managerAddress: '0xc8e1f3b9a0cdfcef9ffd2343b943989a22517b26',
   TX_STATUS_ENUM: {
     NOT_INITIATED: 0,

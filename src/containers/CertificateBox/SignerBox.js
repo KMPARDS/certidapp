@@ -9,7 +9,8 @@ export default class extends Component {
     signerAddress: null,
     name: null,
     website: null,
-    isAuthorised: null
+    isAuthorised: null,
+    logo: null
   };
 
   componentDidMount = async() => {
@@ -30,6 +31,7 @@ export default class extends Component {
       name: caObj.name,
       website: caObj.website ? window._z.toWebsiteURL(caObj.website) : null,
       isAuthorised: certifyingAuthority.isAuthorised,
+      logo: caObj.logo || null,
       loading: false
     });
 
@@ -53,10 +55,25 @@ export default class extends Component {
       signerAuthorisedClass = 'invalid';
     }
 
+    const signerElement = (
+      <>
+        <p>Signer {this.props.serial}: {this.state.name ? <><span className="mono">{this.state.name}</span>{this.state.website ? <a href={this.state.website} rel="noopenner noreferrer" target="_blank" style={{textDecoration: 'none'}}> <img style={{display:'inline',height: '1rem'}} src={'share.png'} /></a> : null} (<span className="mono">{this.state.signerAddress.slice(0,6)}</span>...<span className="mono">{this.state.signerAddress.slice(38)}</span>)</> : (this.state.signerAddress ? <><span className="mono">{this.state.signerAddress}</span></> : <>Computing address...</>)}</p>
+        <p>Signature: <span className="mono">{this.props.signature.slice(0,10)}</span>...<span className="mono">{this.props.signature.slice(122)}</span></p>
+      </>
+    );
+
     return (
       <div className={['signer-box', signerAuthorisedClass].filter(className=>!!className).join(' ')}>
-        <p>Signer {this.props.serial}: {this.state.name ? <><span className="mono">{this.state.name}</span>{this.state.website ? <a href={this.state.website} rel="noopenner noreferrer" target="_blank" style={{textDecoration: 'none'}}>↗️</a> : null} (<span className="mono">{this.state.signerAddress.slice(0,6)}</span>...<span className="mono">{this.state.signerAddress.slice(38)}</span>)</> : (this.state.signerAddress ? <><span className="mono">{this.state.signerAddress}</span></> : <>Computing address...</>)}</p>
-        <p>Signature: <span className="mono">{this.props.signature.slice(0,10)}</span>...<span className="mono">{this.props.signature.slice(122)}</span></p>
+        {this.state.logo ? <div className="row" style={{display:'inline-block', width:'80%'}}>
+          <div className="column2" style={{textAlign: 'right'}}>
+            <img className="certificate-signer-img" src={'https://ipfs.infura.io/ipfs/'+this.state.logo} />
+          </div>
+          <div className="column1">
+            <div style={{textAlign: 'left', marginLeft: '1rem'}}>
+              {signerElement}
+            </div>
+          </div>
+        </div> : signerElement}
       </div>
     );
   }

@@ -162,3 +162,19 @@ body {
 a:hover {
   color: #2aa3cc;
 }
+
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.column1 {
+  float: left;
+  width: 75%;
+}
+.column2 {
+  float: left;
+  width: 25%;
+}
