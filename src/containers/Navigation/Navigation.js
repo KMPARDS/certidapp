@@ -30,11 +30,6 @@ export default class extends Component {
 
     const intervalId2 = setInterval(() => {
       try {
-        const isManager = !!window.web3 && !!window.web3.currentProvider && !!this.state.managerAddress && this.state.managerAddress.toLowerCase() === window.web3.currentProvider.selectedAddress.toLowerCase();
-        if(isManager !== this.state.isManager) {
-          this.setState({ isManager });
-        }
-
         const navigationGroup = document.querySelector('.navigation-group');
         if(navigationGroup) {
           if(navigationGroup.offsetHeight > 56) {
@@ -43,8 +38,13 @@ export default class extends Component {
             this.setState({ displayHideButton: !this.state.showAllItems });
           }
         }
+
+        const isManager = !!window.web3 && !!window.web3.currentProvider && !!this.state.managerAddress && this.state.managerAddress.toLowerCase() === window.web3.currentProvider.selectedAddress.toLowerCase();
+        if(isManager !== this.state.isManager) {
+          this.setState({ isManager });
+        }
       } catch (error) {
-        clearInterval(intervalId2);
+        // clearInterval(intervalId2);
       }
     }, 100);
   };
