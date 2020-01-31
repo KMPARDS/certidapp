@@ -83,7 +83,7 @@ export default class extends Component {
           type="text"
           placeholder="IPFS Hash of Logo"
           onChange={event => this.setState({image: event.target.value})}/>
-        {this.state.image ? <img src={`https://ipfs.infura.io/ipfs/${this.state.image}`} /> : null}
+        {this.state.image ? <img style={{maxHeight:'200px', maxWidth:'200px'}} src={`https://ipfs.infura.io/ipfs/${this.state.image}`} /> : null}
       </div>
 
       {this.state.errorMessage ? <p className="error-message">Error: {this.state.errorMessage}</p> : null}
