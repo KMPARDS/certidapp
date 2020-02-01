@@ -40,10 +40,26 @@ export default class extends Component {
         <p className="category">Certificate of <span className="category mono">{this.props.certificateObj.parsedCertificate.category}</span></p>
         <p className="category-subtext">is awarded to</p>
         <p className="name mono">{this.props.certificateObj.parsedCertificate.name}</p>
-        <p>For acheiving <span className="score mono">{this.props.certificateObj.parsedCertificate.score}%</span> <span className="mono">{this.props.certificateObj.parsedCertificate.category}</span> in <span className="subject mono">{this.props.certificateObj.parsedCertificate.subject}</span></p>
+        <p>For {this.props.certificateObj.parsedCertificate.score !== null ? <>Acheiving <span className="score mono">{this.props.certificateObj.parsedCertificate.score}%</span></> : <>Extraordinary</>} <span className="mono">{this.props.certificateObj.parsedCertificate.category}</span> in <span className="subject mono">{this.props.certificateObj.parsedCertificate.subject}</span>{(() => {
+          const date1 = this.props.certificateObj.parsedCertificate.datetime1
+            || this.props.certificateObj.parsedCertificate.date1;
+          const date2 = this.props.certificateObj.parsedCertificate.datetime2
+            || this.props.certificateObj.parsedCertificate.date2;
+          const DateEl = props => <span className="date mono">{props.children}</span>
+          console.log({date1, date2});
+          if(date1 && date2) {
+            return <> from <DateEl>{date1}</DateEl> to <DateEl>{date2}</DateEl></>;
+          } else if(date1 && !date2) {
+            return <> on <DateEl>{date1}</DateEl></>;
+          } else if(!date1 && date2) {
+            return <> till <DateEl>{date2}</DateEl></>
+          } else {
+            return null;
+          }
+        })()}{this.props.certificateObj.parsedCertificate.location ? <> at <span className="location mono">{this.props.certificateObj.parsedCertificate.location}</span></> : null}.</p>
 
-        {Object.keys(this.props.certificateObj.parsedCertificate).filter(key => !certOrder.includes(key)).map(key => (
-          <p key={'cert-'+key} className={key}>{this.props.certificateObj.parsedCertificate[key]}</p>
+        {Object.keys(this.props.certificateObj.parsedCertificate).filter(key => ![...certOrder, 'date1', 'date2', 'location'].includes(key)).map(key => (
+          <p key={'cert-'+key} className={key}>{key}: {this.props.certificateObj.parsedCertificate[key]}</p>
         ))}
 
 

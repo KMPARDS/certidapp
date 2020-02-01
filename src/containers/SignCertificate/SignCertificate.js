@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Helmet } from "react-helmet";
-import { certOrder } from '../../env';
+import { certOrder, extraDataTypes, extraDataKeysExample, dataTypesExample } from '../../env';
 import CSVReader from './CSVReader';
+import DatePicker from '../DatePicker/DatePicker';
 import CertificateBox from '../CertificateBox/CertificateBox';
 import copy from 'copy-to-clipboard';
 
@@ -22,6 +23,7 @@ export default class extends Component {
     score: '',
     category: '',
     errorMessage: '',
+    extraData: [],
     certificateHex: null,
     copied: false,
     authorityName: '',
@@ -71,8 +73,9 @@ export default class extends Component {
       let encodedCertificate = window._z.encodeCertificateObject({
         name: this.state.name,
         subject: this.state.subject,
-        score: this.state.score,
-        category: this.state.category
+        score: this.state.score || null,
+        category: this.state.category,
+        ...Object.fromEntries(this.state.extraData)
       });
 
       const signature = await window.signer.signMessage(ethers.utils.arrayify(encodedCertificate.dataRLP));
@@ -283,7 +286,72 @@ export default class extends Component {
             onChange={event => this.setState({category: event.target.value})}/>
         </div>
 
+        {this.state.extraData.map((entry, i) => (
+          <div className="form-group" key={'extraData-'+i}>
+            <select onChange={event => {
+              const extraData = [...this.state.extraData];
+              extraData[i][0] = event.target.value;
+              // console.log({extraData});
+              this.setState({ extraData });
+            }}>
+              <option selected disabled value={null}>Select Property</option>
+              {Object.keys(extraDataTypes).map((key, j) => (
+                <option key={`extraData-${i}-${j}`} value={key}>{key}</option>
+              ))}
+            </select>
+            <br />
+            {(() => {
+              switch(extraDataTypes[entry[0]]) {
+                case 'date':
+                  return (
+                    <DatePicker
+                      showTimeSelect
+                      onChange={date => {
+                        const extraData = [...this.state.extraData];
+                        let dateStr = String(date.getDate());
+                        if(dateStr.length < 2) dateStr = '0'+dateStr;
+                        let monthStr = String(date.getMonth()+1);
+                        if(monthStr.length < 2) monthStr = '0'+monthStr;
+                        let yearStr = String(date.getFullYear());
+                        extraData[i][1] = `${dateStr}/${monthStr}/${yearStr}`;
+                        // console.log({extraData});
+                        this.setState({ extraData });
+                      }}
+                      />
+                  );
+                case 'datetime':
+                  return (
+                    <DatePicker
+                      showTimeSelect
+                      onChange={date => {
+                        const extraData = [...this.state.extraData];
+                        extraData[i][1] = Math.floor(date.getTime() / 1000);
+                        // console.log({extraData});
+                        this.setState({ extraData });
+                      }}
+                    />
+                  );
+                default:
+                  return (
+                    <input
+                      className="certificate-textinput"
+                      type="text"
+                      placeholder={entry[0] === null ? 'Select a property from above' :(extraDataKeysExample[entry[0]] ? `e.g. ${extraDataKeysExample[entry[0]]}` : (dataTypesExample[extraDataTypes[entry[0]]] ? `e.g. ${dataTypesExample[extraDataTypes[entry[0]]]}` : 'Enter value for above property'))}
+                      onChange={event => {
+                        const extraData = [...this.state.extraData];
+                        extraData[i][1] = event.target.value;
+                        // console.log({extraData});
+                        this.setState({ extraData });
+                      }}/>
+                  );
+              }
+            })()}
+          </div>
+        ))}
+
         {this.state.errorMessage ? <p className="error-message">{this.state.errorMessage}</p> : null}
+
+        <button className="btn" onClick={() => this.setState({ extraData: [...this.state.extraData, [null,null]] })}>Add More Data</button>
 
         <button className="btn" onClick={this.signNewCertificate}>Sign this Certificate</button>
         </>}

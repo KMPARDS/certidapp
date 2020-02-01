@@ -65,6 +65,28 @@ export function bytify(input, type) {
       return input ? '0x01' : '0x00';
     case 'base58':
       return '0x'+bs58.decode(input).toString('hex');
+    case 'date':
+      if(typeof input === 'string') {
+        input = input.split('/').join('');
+        if(isNaN(Number(input))) throw new Error(`Invalid Date Content (${input})`);
+        if(String(input).length !== 8) throw new Error(`Date should have 8 digits (${input}) (length: ${String(input).length})`);
+        if(String(input).split('.').length > 1) throw new Error(`Date should have no decimal point (${input})`);
+        return bytify(input, 'number');
+      } else if(typeof input === 'object' && input instanceof Date && !isNaN(input)) {
+        let dateStr = String(input.getDate());
+        if(dateStr.length < 2) dateStr = '0'+dateStr;
+        let monthStr = String(input.getMonth()+1);
+        if(monthStr.length < 2) monthStr = '0'+monthStr;
+        let yearStr = String(input.getFullYear());
+        return bytify(`${dateStr}/${monthStr}/${yearStr}`, 'date');
+      } else {
+        throw new Error('Invalid Date Type ' + typeof input);
+      }
+    case 'datetime':
+      if(typeof input === 'string') {
+        input = (new Date(input)).getTime();
+      }
+      return bytify(input, 'number');
     default:
       return null;
   }
@@ -89,6 +111,11 @@ export function renderBytes(hex, type) {
     case 'base58':
       if(hex.slice(0,2) === '0x') hex = hex.slice(2);
       return bs58.encode(Buffer.from(hex, 'hex'));
+    case 'date':
+      const date = String(renderBytes(hex, 'number'));
+      return date.slice(0,2)+'/'+date.slice(2,4)+'/'+date.slice(4,8);
+    case 'datetime':
+      return (new Date(renderBytes(hex, 'number'))).toLocaleString();
     default:
       return hex;
   }

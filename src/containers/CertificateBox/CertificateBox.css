@@ -56,6 +56,16 @@
   font-weight: bold;
 }
 
+.certificate-box .date {
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
+.certificate-box .location {
+  font-size: 1.7rem;
+  font-weight: bold;
+}
+
 .certificate-box .signer-box {
   /* max-width: 80%; */
   background-color: #0002;
