@@ -47,7 +47,7 @@ export default class extends Component {
 
           {
             pc.score || pc.subject || pc.date1 || pc.datetime1
-            ? <p>For {
+            ? <p>{pc.score || pc.subject || pc.category ? <>For </> : null}{
               pc.category || pc.score
               ? <>{
                 pc.score !== null
