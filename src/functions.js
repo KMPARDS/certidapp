@@ -112,7 +112,8 @@ export function renderBytes(hex, type) {
       if(hex.slice(0,2) === '0x') hex = hex.slice(2);
       return bs58.encode(Buffer.from(hex, 'hex'));
     case 'date':
-      const date = String(renderBytes(hex, 'number'));
+      let date = String(renderBytes(hex, 'number'));
+      if(date.length < 8) date = '0' + date;
       return date.slice(0,2)+'/'+date.slice(2,4)+'/'+date.slice(4,8);
     case 'datetime':
       return (new Date(renderBytes(hex, 'number'))).toLocaleString();
