@@ -67,6 +67,27 @@ export default class extends Component {
     clearInterval(this.intervalId);
   }
 
+  onNewFieldUpdate = () => {
+    try {
+      const encodedCertificate = window._z.encodeCertificateObject({
+        name: this.state.name,
+        subject: this.state.subject,
+        score: this.state.score || null,
+        category: this.state.category,
+        ...Object.fromEntries(this.state.extraData)
+      });
+
+      const certificateObj = window._z.decodeCertificateData(encodedCertificate);
+
+      this.setState({
+        certificateObj,
+        errorMessage: ''
+      });
+    } catch (error) {
+      this.setState({ errorMessage: error.message })
+    }
+  }
+
   signNewCertificate = async() => {
     this.setState({ errorMessage: '' });
     try {
@@ -256,7 +277,10 @@ export default class extends Component {
             className="certificate-textinput"
             type="text"
             placeholder="Enter Certifiee Name"
-            onChange={event => this.setState({name: event.target.value})}/>
+            onChange={async event => {
+              await this.setState({name: event.target.value});
+              this.onNewFieldUpdate();
+            }}/>
         </div>
 
         <div className="form-group">
@@ -265,7 +289,10 @@ export default class extends Component {
             className="certificate-textinput"
             type="text"
             placeholder="Enter Subject / Course Name"
-            onChange={event => this.setState({subject: event.target.value})}/>
+            onChange={async event => {
+              await this.setState({subject: event.target.value});
+              this.onNewFieldUpdate();
+            }}/>
         </div>
 
         <div className="form-group">
@@ -274,7 +301,10 @@ export default class extends Component {
             className="certificate-textinput"
             type="text"
             placeholder="E.g. 74.89"
-            onChange={event => this.setState({score: event.target.value})}/>
+            onChange={async event => {
+              await this.setState({score: event.target.value});
+              this.onNewFieldUpdate();
+            }}/>
         </div>
 
         <div className="form-group">
@@ -283,16 +313,20 @@ export default class extends Component {
             className="certificate-textinput"
             type="text"
             placeholder="e.g. Participation / Merit / Appreciation"
-            onChange={event => this.setState({category: event.target.value})}/>
+            onChange={async event => {
+              await this.setState({category: event.target.value});
+              this.onNewFieldUpdate();
+            }}/>
         </div>
 
         {this.state.extraData.map((entry, i) => (
           <div className="form-group" key={'extraData-'+i}>
-            <select onChange={event => {
+            <select onChange={async event => {
               const extraData = [...this.state.extraData];
               extraData[i][0] = event.target.value;
               // console.log({extraData});
-              this.setState({ extraData });
+              await this.setState({ extraData });
+              this.onNewFieldUpdate();
             }}>
               <option selected disabled value={null}>Select Property</option>
               {Object.keys(extraDataTypes).map((key, j) => (
@@ -306,7 +340,7 @@ export default class extends Component {
                   return (
                     <DatePicker
                       showTimeSelect
-                      onChange={date => {
+                      onChange={async date => {
                         const extraData = [...this.state.extraData];
                         let dateStr = String(date.getDate());
                         if(dateStr.length < 2) dateStr = '0'+dateStr;
@@ -315,7 +349,8 @@ export default class extends Component {
                         let yearStr = String(date.getFullYear());
                         extraData[i][1] = `${dateStr}/${monthStr}/${yearStr}`;
                         // console.log({extraData});
-                        this.setState({ extraData });
+                        await this.setState({ extraData });
+                        this.onNewFieldUpdate();
                       }}
                       />
                   );
@@ -323,11 +358,12 @@ export default class extends Component {
                   return (
                     <DatePicker
                       showTimeSelect
-                      onChange={date => {
+                      onChange={async date => {
                         const extraData = [...this.state.extraData];
                         extraData[i][1] = Math.floor(date.getTime() / 1000);
                         // console.log({extraData});
-                        this.setState({ extraData });
+                        await this.setState({ extraData });
+                        this.onNewFieldUpdate();
                       }}
                     />
                   );
@@ -337,11 +373,12 @@ export default class extends Component {
                       className="certificate-textinput"
                       type="text"
                       placeholder={entry[0] === null ? 'Select a property from above' :(extraDataKeysExample[entry[0]] ? `e.g. ${extraDataKeysExample[entry[0]]}` : (dataTypesExample[extraDataTypes[entry[0]]] ? `e.g. ${dataTypesExample[extraDataTypes[entry[0]]]}` : 'Enter value for above property'))}
-                      onChange={event => {
+                      onChange={async event => {
                         const extraData = [...this.state.extraData];
                         extraData[i][1] = event.target.value;
                         // console.log({extraData});
-                        this.setState({ extraData });
+                        await this.setState({ extraData });
+                        this.onNewFieldUpdate();
                       }}/>
                   );
               }
@@ -352,6 +389,12 @@ export default class extends Component {
         {this.state.errorMessage ? <p className="error-message">{this.state.errorMessage}</p> : null}
 
         <button className="btn" onClick={() => this.setState({ extraData: [...this.state.extraData, [null,null]] })}>Add More Data</button>
+
+        {this.state.certificateObj ? <CertificateBox
+          certificateObj={this.state.certificateObj}
+          qrDisplay={false}
+          validCertificate={[this.state.validCertificate, newStatus => this.setState({ validCertificate: newStatus })]}
+          /> : null}
 
         <button className="btn" onClick={this.signNewCertificate}>Sign this Certificate</button>
         </>}
