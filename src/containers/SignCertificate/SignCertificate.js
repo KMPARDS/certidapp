@@ -28,6 +28,7 @@ export default class extends Component {
     copied: false,
     authorityName: '',
     isAuthorised: true,
+    csvKeys: null,
     certificatesToSign: [],
     errorsInCSV: '',
     csvSigning: false,
@@ -156,7 +157,7 @@ export default class extends Component {
     let errorsInCSV = '';
     // csv rows: hex, name, subject, score, category
     let keys = ['hex', ...certOrder];
-    const certificatesToSign = output.split('\n').map((row, i) => {
+    const certificatesToSign = output.split('\r').join('').split('\t').join('').split('\n').map((row, i) => {
       const columns = row.split(',');
       if(i === 0 && columns[0] === 'hex') {
         keys = columns;
@@ -179,7 +180,7 @@ export default class extends Component {
       }
     }).filter(entry => !!entry);
     console.log({certificatesToSign}, errorsInCSV);
-    this.setState({ certificatesToSign, errorsInCSV });
+    this.setState({ csvKeys: keys, certificatesToSign, errorsInCSV });
   }
 
   signCSV = async() => {
@@ -215,7 +216,7 @@ export default class extends Component {
   };
 
   downloadCSV = () => {
-    const keys = ['hex', ...certOrder];
+    const keys = this.state.csvKeys || ['hex', ...certOrder];
     const text = keys.join(',')+'\n'+this.state.certificatesSigned.map(c => {
       return [
         ...c.columns,
@@ -450,11 +451,9 @@ export default class extends Component {
             <table>
               <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Course</th>
-                  <th>Score</th>
-                  <th>Extra Data</th>
-                  <th>Signed Certificate</th>
+                  {this.state.csvKeys.map(key => (
+                    <th key={'csvkey-'+key}>{key}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
