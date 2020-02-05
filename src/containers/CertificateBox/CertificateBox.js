@@ -99,8 +99,8 @@ export default class extends Component {
             : (
               0 < this.state.validCertificate
               && this.state.validCertificate < (this.props.certificateObj.signatures ? this.props.certificateObj.signatures.length : 0)
-              ? <>Seems that this certificate is signed by only {this.state.validCertificate} valid signers out of {this.props.certificateObj.signatures ? this.props.certificateObj.signatures.length : 0} total signers, you can remove signatures of unauthorised signers.</>
-              : <>There are no authorised signatures on this certificate.</>
+              ? <>Seems that this certificate is signed by only {this.state.validCertificate} valid signers out of {this.props.certificateObj.signatures ? this.props.certificateObj.signatures.length : 0} total signers, you can remove signatures of unverified signers.</>
+              : <>There are no KYC verified signers on this certificate.</>
             )}</p>
 
           {(this.props.certificateObj.signatures ? this.props.certificateObj.signatures.length : 0)
