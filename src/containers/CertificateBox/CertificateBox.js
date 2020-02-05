@@ -46,7 +46,7 @@ export default class extends Component {
           {pc.name ? <p className="name mono">{pc.name}</p> : null}
 
           {
-            pc.score || pc.subject || pc.date1 || pc.datetime1
+            pc.score || pc.subject || pc.date || pc.datetime
             ? <p>{pc.score || pc.subject || pc.category ? <>For </> : null}{
               pc.category || pc.score
               ? <>{
@@ -65,17 +65,16 @@ export default class extends Component {
               : null
             }{
               (() => {
-                const date1 = pc.datetime1
-                  || pc.date1;
+                const date = pc.datetime
+                  || pc.date;
                 const date2 = pc.datetime2
                   || pc.date2;
                 const DateEl = props => <span className="date mono">{props.children}</span>
-                console.log({date1, date2});
-                if(date1 && date2) {
-                  return <> from <DateEl>{date1}</DateEl> to <DateEl>{date2}</DateEl></>;
-                } else if(date1 && !date2) {
-                  return <> on <DateEl>{date1}</DateEl></>;
-                } else if(!date1 && date2) {
+                if(date && date2) {
+                  return <> from <DateEl>{date}</DateEl> to <DateEl>{date2}</DateEl></>;
+                } else if(date && !date2) {
+                  return <> on <DateEl>{date}</DateEl></>;
+                } else if(!date && date2) {
                   return <> till <DateEl>{date2}</DateEl></>
                 } else {
                   return null;
@@ -89,7 +88,7 @@ export default class extends Component {
             : null
           }
 
-          {Object.keys(pc).filter(key => ![...certOrder, 'date1', 'date2', 'location'].includes(key)).map(key => (
+          {Object.keys(pc).filter(key => ![...certOrder, 'date', 'date2', 'location'].includes(key)).map(key => (
             <p key={'cert-'+key} className={key}>{key}: {pc[key]}</p>
           ))}
 

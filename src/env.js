@@ -13,10 +13,10 @@ const env = {
     image: 'base58',
     file: 'base58',
     url: 'string',
-    date1: 'date',
+    date: 'date',
     date2: 'date',
     location: 'string',
-    datetime1: 'datetime',
+    datetime: 'datetime',
     datetime2: 'datetime',
     comments: 'string'
   },
