@@ -51,8 +51,20 @@ body {
 .container {
   width:80vw;
   max-width: 1024px;
-  margin-top: 50px;
+  margin: 100px 0;
   overflow: scroll;
+}
+
+.home-details {
+  text-align: justify;
+}
+
+.home-details h3, .home-details h4 {
+  margin-bottom: .5rem;
+}
+
+.home-details p {
+  margin: 1rem 0;
 }
 
 .form-group {
@@ -138,7 +150,7 @@ body {
 
 .error-message {
   background-color: #CF000F44;
-  color: #CF000FDD;
+  /* color: #CF000FDD; */
   padding: .5rem;
   border-radius: .2rem;
   border:1px solid #CF000FAA;
@@ -149,6 +161,13 @@ body {
   padding: .5rem;
   border-radius: .2rem;
   border:1px solid #cccccc;
+}
+
+.success-message {
+  background-color: #00994419;
+  padding: .5rem;
+  border-radius: .2rem;
+  border:1px solid #009944;
 }
 
 /* a.link {

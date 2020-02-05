@@ -39,4 +39,13 @@ const env = {
   },
 };
 
+switch (env.network) {
+  case 'homestead':
+    env.networkId = 1;
+    break;
+  case 'kovan':
+    env.networkId = 42;
+    break;
+}
+
 module.exports = env;

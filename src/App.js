@@ -1,6 +1,7 @@
 import React from 'react';
 import { Router, Route, Switch } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
+import Home from './containers/Home/Home';
 import Navigation from './containers/Navigation/Navigation';
 import RegisterCertificate from './containers/RegisterCertificate/RegisterCertificate';
 import ViewCertificate from './containers/ViewCertificate/ViewCertificate';
@@ -33,15 +34,7 @@ const App = props => (
         <Navigation />
         <div className="container">
           <Switch>
-            <Route path="/" exact component={() => (
-              <p>
-                Welcome to CertiÐApp.
-                <br />
-                {window.ethereum
-                  ? <>Please select an option from above.</>
-                  : <>You will need <a href="https://metamask.io/" rel="noopenner noreferrer">Metamask</a> installed if you want to register your certificate.</>}
-              </p>
-            )} />
+            <Route path="/" exact component={Home} />
             <Route path="/register-certificate" exact component={RegisterCertificate} />
             <Route path="/view-certificate" exact component={ViewCertificate} />
             <Route path="/view-certificate/:hash" exact component={Hash} />

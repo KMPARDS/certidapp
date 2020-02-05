@@ -8,7 +8,8 @@ export default class extends Component {
     isManager: false,
     showAllItems: true,
     displayHideButton: false,
-    managerAddress: null
+    managerAddress: null,
+    invalidNetwork: false
   };
 
   componentDidMount = () => {
@@ -39,6 +40,8 @@ export default class extends Component {
           }
         }
 
+        /// change the navbar color during incorrect network
+
         const isManager = !!window.web3 && !!window.web3.currentProvider && !!this.state.managerAddress && this.state.managerAddress.toLowerCase() === window.web3.currentProvider.selectedAddress.toLowerCase();
         if(isManager !== this.state.isManager) {
           this.setState({ isManager });
@@ -52,6 +55,7 @@ export default class extends Component {
   render = () => (
     <div className="navigation-group">
       {this.state.showAllItems ? <>
+        <NavigationElement heading="Home" path="" />
         <NavigationElement heading="Register Certificate" />
         <NavigationElement heading="View Certificate" />
         {this.state.isManager ? <NavigationElement heading="Add Certifier" /> : null}

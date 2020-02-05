@@ -69,6 +69,7 @@ export default class extends Component {
           content="Register your certificate on Blockchain"
         />
       </Helmet>
+      <p className="status-message">If you have a certificate hex string, you can paste it in the below text box to decode it. You can also use the below Register Certificate button to submit the certificate hex string to the Smart Contract.<br /><br />If you don't have a certificate hex string and you want a certificate, then you can ask any organisation around you that gives traditional printed certificates to switch to blockchain based secure certificates using CertiÐApp.</p>
       <p>Paste your signed certificate in the below box:</p>
       <textarea className={['certificate-textarea', this.state.textAreaClass].filter(className=>!!className).join(' ')} onChange={this.onTextAreaChange} />
       <br />
