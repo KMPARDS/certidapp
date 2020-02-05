@@ -3,32 +3,6 @@ import MetamaskNetworkError from '../MetamaskNetworkError/MetamaskNetworkError';
 import { network, certificateContract, networkId, METAMASK_ENUM } from '../../env';
 
 export default class extends Component {
-  // state = {
-  //   metamaskStatus: METAMASK_ENUM.NOT_INSTALLED
-  // };
-
-  componentDidMount = () => {
-    // this.intervalId = setInterval(() => {
-    //   let latestStatus = METAMASK_ENUM.NOT_INSTALLED;
-    //   if(window.ethereum) {
-    //     latestStatus = METAMASK_ENUM.INSTALLED_BUT_NOT_CONNECTED;
-    //   }
-    //   if(window.signer) {
-    //     latestStatus = METAMASK_ENUM.CONNECTED;
-    //   }
-    //   if(window.signer && window.web3.currentProvider.networkVersion != networkId) {
-    //     latestStatus = METAMASK_ENUM.OTHER_NETWORK;
-    //   }
-    //   if(this.state.metamaskStatus !== latestStatus) {
-    //     this.setState({ metamaskStatus: latestStatus });
-    //   }
-    // }, 300);
-  };
-
-  // componentWillUnmount = () => {
-  //   clearInterval(this.intervalId);
-  // }
-
   render = () => (
     <>
       <div className="status-message">
@@ -42,7 +16,7 @@ export default class extends Component {
         </div>
       </div>
 
-      <p>Smart Contract Link: <a className="link" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/address/${certificateContract.address}#code`} target="_blank">GitHub Repository</a></p>
+      <p>Smart Contract Link: <a className="link" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/address/${certificateContract.address}#code`} target="_blank">EtherScan</a></p>
 
       <div className="home-details">
       <h3>Why CertiÐApp</h3>
