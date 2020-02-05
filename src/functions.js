@@ -341,7 +341,9 @@ export async function getCertificateObjFromCertificateHash(certificateHash) {
     }
 
     // console.log({certificateObj});
-    txHashArray.push(txHash);
+    if(!txHashArray.includes(txHash)) {
+      txHashArray.push(txHash);
+    }
   }
 
   certificateObj.txHashArray = txHashArray;
