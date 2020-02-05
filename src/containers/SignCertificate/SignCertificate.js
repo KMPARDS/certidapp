@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet } from "react-helmet";
-import { certOrder, extraDataTypes, extraDataKeysExample, dataTypesExample } from '../../env';
+import { certOrder, extraDataTypes, extraDataKeysExample, dataTypesExample, AUTHORITY_STATUS_ENUM } from '../../env';
 import CSVReader from './CSVReader';
 import DatePicker from '../DatePicker/DatePicker';
 import CertificateBox from '../CertificateBox/CertificateBox';
@@ -46,7 +46,7 @@ export default class extends Component {
           try {
             const certifyingAuthority = await window.certificateContractInstance.functions.certifyingAuthorities(currentAddress);
 
-            if(certifyingAuthority.isAuthorised) {
+            if(certifyingAuthority.status === AUTHORITY_STATUS_ENUM.AUTHORISED) {
               const authorityName = window._z.decodeCertifyingAuthority(certifyingAuthority.data).name;
 
               this.setState({ authorityName, isAuthorised: true });

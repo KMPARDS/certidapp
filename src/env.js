@@ -1,9 +1,9 @@
-const certificateStorageJSON = require('./compiledContracts/CertificateStorage_CertificateStorage.json');
+const certificateStorageJSON = require('./compiledContracts/CertiDApp_CertiDApp.json');
 
 const env = {
   network: 'kovan',
   certificateContract: {
-    address: '0x34AEA1D67C5484133BeE0E60aEbB9882a772f64B',
+    address: '0x3ea996e3A2f2A8b235065a7Fa5d55e5f626f0003',
     abi: certificateStorageJSON.abi
   },
   dataTypes: [null, 'bytes', 'number', 'float', 'string', 'boolean', 'base58', 'date', 'datetime'],
@@ -37,6 +37,12 @@ const env = {
     WAITING_FOR_CONFIRMATION: 2,
     CONFIRMED: 3
   },
+  AUTHORITY_STATUS_ENUM: {
+    NOT_AUTHORISED: 0,
+    AUTHORISED: 1,
+    MIGRATED: 2,
+    SUSPENDED: 3
+  }
 };
 
 switch (env.network) {

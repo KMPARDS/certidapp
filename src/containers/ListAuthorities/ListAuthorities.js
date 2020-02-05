@@ -18,7 +18,7 @@ export default class extends Component {
         address: certificateContract.address,
         fromBlock: 0,
         toBlock: 'latest',
-        topics: [ethers.utils.id('Authorization(address,bool)')]
+        topics: [ethers.utils.id('AuthorityStatusUpdated(address,uint8)')]
       });
       // console.log(logs);
       this.setState({

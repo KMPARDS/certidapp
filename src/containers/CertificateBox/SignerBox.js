@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { AUTHORITY_STATUS_ENUM } from '../../env';
 import './CertificateBox.css';
 
 const ethers = require('ethers');
@@ -9,7 +10,7 @@ export default class extends Component {
     signerAddress: null,
     name: null,
     website: null,
-    isAuthorised: null,
+    status: null,
     image: null
   };
 
@@ -30,7 +31,7 @@ export default class extends Component {
     this.setState({
       name: caObj.name,
       website: caObj.website ? window._z.toWebsiteURL(caObj.website) : null,
-      isAuthorised: certifyingAuthority.isAuthorised,
+      status: certifyingAuthority.status,
       image: caObj.image || null,
       loading: false
     });
@@ -40,7 +41,7 @@ export default class extends Component {
     //   console.log('i marked it', certifyingAuthority.isAuthorised);
     //   this.props.validCertificate[1](certifyingAuthority.isAuthorised);
     // }
-    if(certifyingAuthority.isAuthorised) {
+    if(certifyingAuthority.status === AUTHORITY_STATUS_ENUM.AUTHORISED) {
       this.props.validCertificate[1]((this.props.validCertificate[0] || 0)+1);
     }
   };
@@ -49,8 +50,13 @@ export default class extends Component {
     let signerAuthorisedClass;
     if(this.state.loading) {
       signerAuthorisedClass = 'loading';
-    } else if(this.state.isAuthorised) {
+    } else if(
+      this.state.status === AUTHORITY_STATUS_ENUM.AUTHORISED
+        || this.state.status === AUTHORITY_STATUS_ENUM.MIGRATED
+    ) {
       signerAuthorisedClass = 'valid';
+    } else if(this.state.status === AUTHORITY_STATUS_ENUM.SUSPENDED) {
+      signerAuthorisedClass = 'suspended';
     } else {
       signerAuthorisedClass = 'invalid';
     }

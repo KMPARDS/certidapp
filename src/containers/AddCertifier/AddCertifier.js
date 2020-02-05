@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Helmet } from "react-helmet";
+import { AUTHORITY_STATUS_ENUM } from '../../env';
 
 const ethers = require('ethers');
 
@@ -23,8 +24,10 @@ export default class extends Component {
         image: this.state.image
       });
 
-      const tx = await window.certificateContractInstance.functions.addCertifyingAuthority(
-        address, encoded
+      const tx = await window.certificateContractInstance.functions.updateCertifyingAuthority(
+        address,
+        encoded,
+        AUTHORITY_STATUS_ENUM.AUTHORISED
       );
 
       this.setState({

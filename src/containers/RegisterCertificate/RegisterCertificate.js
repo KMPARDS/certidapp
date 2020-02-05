@@ -100,7 +100,7 @@ export default class extends Component {
 
         <button
           className="btn"
-          disabled={this.state.txStatus !== TX_STATUS_ENUM.NOT_INITIATED || this.state.validCertificate !== (this.state.certificateObj && this.state.certificateObj.signatures && this.state.certificateObj.signatures.length)}
+          disabled={this.state.txStatus !== TX_STATUS_ENUM.NOT_INITIATED || (false && this.state.validCertificate !== (this.state.certificateObj && this.state.certificateObj.signatures && this.state.certificateObj.signatures.length))}
           onClick={this.onRegister}
         >
           {(() => {

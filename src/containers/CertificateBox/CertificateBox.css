@@ -84,6 +84,11 @@
   background-color: #CF000f50;
 }
 
+.certificate-box .signer-box.suspended {
+  /* max-width: 80%; */
+  background-color: #ffa50050;
+}
+
 .certificate-box .signer-box.loading {
   /* max-width: 80%; */
   background-color: #0003;
