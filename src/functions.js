@@ -1,4 +1,4 @@
-import { dataTypes, certOrder, authOrder, extraDataTypes, certificateContract } from './env';
+import { dataTypes, certOrder, authOrder, extraDataTypes, certificateContract, network } from './env';
 
 const ethers = require('ethers');
 const bs58 = require('bs58');
@@ -300,6 +300,7 @@ export function decodeCertifyingAuthority(encodedAuthorityData) {
 }
 
 export async function getCertificateObjFromCertificateHash(certificateHash) {
+  if(!window.provider) window.provider = ethers.getDefaultProvider(network);
   const logs = await window.provider.getLogs({
     address: certificateContract.address,
     fromBlock: 0,

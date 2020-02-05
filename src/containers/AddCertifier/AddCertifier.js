@@ -49,6 +49,7 @@ export default class extends Component {
           content="Add Certification Authority to certify."
         />
       </Helmet>
+      <p className="status-message">Using this section, the CertiÐApp Manager can update KYC of certifying authorities.</p>
       <div className="form-group">
         <p>Enter Address of new certifier:</p>
         <input

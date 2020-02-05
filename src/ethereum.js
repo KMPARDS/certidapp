@@ -17,8 +17,14 @@ const setGlobalVariables = () => {
       certificateContract.abi,
       window.signer
     );
+    window.onCorrectNetwork = true;
   } else {
-    window.certificateContractInstance = null;
+    window.certificateContractInstance = new ethers.Contract(
+      certificateContract.address,
+      certificateContract.abi,
+      ethers.getDefaultProvider(network)
+    );;
+    window.onCorrectNetwork = false;
   }
 
   window.signer.getAddress().then(address => window.userAddress = address);

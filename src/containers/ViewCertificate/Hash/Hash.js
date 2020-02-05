@@ -12,10 +12,33 @@ export default class extends Component {
   };
 
   componentDidMount = async() => {
-    const certificateObj = await window._z.getCertificateObjFromCertificateHash(this.props.match.params.hash);
+    try {
+      let hash = this.props.match.params.hash.split(' ').join('').split('\n').join('');
 
-    this.setState({ loading: false, displayText: '', certificateObj})
-  }
+      try {
+        ethers.utils.hexlify(hash)
+      } catch(error) {
+        try {
+          ethers.utils.hexlify(hash+'0')
+        } catch (error) {
+          throw new Error('Hash should contain only allowed characters');
+        }
+      }
+
+      if(hash.length !== 66) throw new Error('Invalid hash length');
+
+      try {
+        const certificateObj = await window._z.getCertificateObjFromCertificateHash(this.props.match.params.hash);
+
+        this.setState({ loading: false, displayText: '', certificateObj})
+      } catch (error) {
+        throw new Error('The certificate is not yet registered or it does not exist.');
+      }
+    } catch (error) {
+      this.setState({ displayText: 'Error: '+error.message });
+    }
+  };
+
   render = () => (
     <>
       {this.state.displayText ? <p>{this.state.displayText}</p> : null}

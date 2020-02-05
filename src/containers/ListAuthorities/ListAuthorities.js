@@ -8,21 +8,26 @@ const ethers = require('ethers');
 export default class extends Component {
   state = {
     certifiers: [],
-    loading: true
+    loading: true,
+    errorMessage: ''
   };
 
   componentDidMount = async() => {
-    const logs = await window.provider.getLogs({
-      address: certificateContract.address,
-      fromBlock: 0,
-      toBlock: 'latest',
-      topics: [ethers.utils.id('Authorization(address,bool)')]
-    });
-    // console.log(logs);
-    this.setState({
-      certifiers: logs.map(log => ethers.utils.hexZeroPad(ethers.utils.hexStripZeros(log.topics[1]), 20)).filter((address, i, self) => self.indexOf(address) === i),
-      loading: false
-    });
+    try {
+      const logs = await window.provider.getLogs({
+        address: certificateContract.address,
+        fromBlock: 0,
+        toBlock: 'latest',
+        topics: [ethers.utils.id('Authorization(address,bool)')]
+      });
+      // console.log(logs);
+      this.setState({
+        certifiers: logs.map(log => ethers.utils.hexZeroPad(ethers.utils.hexStripZeros(log.topics[1]), 20)).filter((address, i, self) => self.indexOf(address) === i),
+        loading: false
+      });
+    } catch (error) {
+      this.setState({ errorMessage: error.message });
+    }
   }
 
   render = () => (
@@ -34,6 +39,8 @@ export default class extends Component {
           content="See all certification authorities"
         />
       </Helmet>
+      <p className="status-message">This page contains list of all verified certifying authority wallets who have completed their KYC.</p>
+
       {this.state.loading
         ? <>Please wait loading certifying authorities...</>
         : <>

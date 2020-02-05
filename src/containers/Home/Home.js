@@ -45,7 +45,7 @@ export default class extends Component {
           switch(this.state.metamaskStatus) {
             case METAMASK_ENUM.NOT_INSTALLED:
               return (
-                <p className="error-message">You will need <a class="link" href="https://metamask.io/" rel="noopenner noreferrer" target="_blank">Metamask</a> installed if you want to register your certificate.</p>
+                <p className="error-message">You will need <a className="link" href="https://metamask.io/" rel="noopenner noreferrer" target="_blank">Metamask</a> installed if you want to register your certificate.</p>
               );
             case METAMASK_ENUM.INSTALLED_BUT_NOT_CONNECTED:
               return (
@@ -64,7 +64,7 @@ export default class extends Component {
         </div>
       </div>
 
-      <p>Smart Contract Link: <a class="link" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/address/${certificateContract.address}#code`} target="_blank">GitHub Repository</a></p>
+      <p>Smart Contract Link: <a className="link" href={`https://${network === 'homestead' ? '' : network+'.'}etherscan.io/address/${certificateContract.address}#code`} target="_blank">GitHub Repository</a></p>
 
       <div className="home-details">
       <h3>Why CertiÐApp</h3>
@@ -87,7 +87,7 @@ CertiÐApp is aims to solve below identified challenges faced by other modes.
 
 <p>While with traditional certificates, reverse engineering a complex printing setup to create fake but almost real looking certificates is quick like at most a week or a month for an printing expert. It's pretty easy to conclude our traditional way is broken and CertiÐApp solves these problems.</p>
 
-<p>You can check the technical details in the <a class="link" href="https://github.com/KMPARDS/certificate-contract" rel="noopenner noreferrer" target="_blank">GitHub Repository</a></p>
+<p>You can check the technical details in the <a className="link" href="https://github.com/KMPARDS/certificate-contract" rel="noopenner noreferrer" target="_blank">GitHub Repository</a></p>
 
 </div>
     </>

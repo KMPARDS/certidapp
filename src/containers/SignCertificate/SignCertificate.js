@@ -496,9 +496,10 @@ export default class extends Component {
             content="Sign Certificate which can be submitted to blockchain"
           />
         </Helmet>
+
         {this.state.isAuthorised
           ? <p className="status-message">Welcome {this.state.authorityName}! Using this portal you can sign certificates on your half and send the generated certificate hex strings to your students/clients so they can register those certificates.</p>
-          : <p className="error-message">Looks like {window.userAddress} is not authorised as a certifying authority, hence the smart contract will not accept certificates signed by this private key.</p>}
+          : <p className="error-message">{window.signer ? <>Looks like {window.userAddress} is not a verified certifying authority. If you do your KYC for this wallet address, you'll become a verified certificate signer and be able to have a display name, website, logo in the certificates you sign.</> : <>Looks like Metamask is not connected. Please connect it to start signing certificates</>}</p>}
 
         {screen}
       </>
