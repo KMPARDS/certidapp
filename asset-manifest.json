@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/certidapp/static/css/main.3c9b2150.chunk.css",
-    "main.js": "/certidapp/static/js/main.a744d790.chunk.js",
-    "main.js.map": "/certidapp/static/js/main.a744d790.chunk.js.map",
+    "main.css": "/certidapp/static/css/main.7661dc6f.chunk.css",
+    "main.js": "/certidapp/static/js/main.9401c855.chunk.js",
+    "main.js.map": "/certidapp/static/js/main.9401c855.chunk.js.map",
     "runtime-main.js": "/certidapp/static/js/runtime-main.bf96a760.js",
     "runtime-main.js.map": "/certidapp/static/js/runtime-main.bf96a760.js.map",
     "static/js/2.4730bb77.chunk.js": "/certidapp/static/js/2.4730bb77.chunk.js",
     "static/js/2.4730bb77.chunk.js.map": "/certidapp/static/js/2.4730bb77.chunk.js.map",
     "index.html": "/certidapp/index.html",
-    "precache-manifest.018fc67edc6f25ba08ba699560c51a96.js": "/certidapp/precache-manifest.018fc67edc6f25ba08ba699560c51a96.js",
+    "precache-manifest.36b31137ac69f07b06ff66ee51151e86.js": "/certidapp/precache-manifest.36b31137ac69f07b06ff66ee51151e86.js",
     "service-worker.js": "/certidapp/service-worker.js",
-    "static/css/main.3c9b2150.chunk.css.map": "/certidapp/static/css/main.3c9b2150.chunk.css.map"
+    "static/css/main.7661dc6f.chunk.css.map": "/certidapp/static/css/main.7661dc6f.chunk.css.map"
   },
   "entrypoints": [
     "static/js/runtime-main.bf96a760.js",
     "static/js/2.4730bb77.chunk.js",
-    "static/css/main.3c9b2150.chunk.css",
-    "static/js/main.a744d790.chunk.js"
+    "static/css/main.7661dc6f.chunk.css",
+    "static/js/main.9401c855.chunk.js"
   ]
 }
