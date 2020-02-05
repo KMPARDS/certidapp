@@ -36,8 +36,7 @@ const setUpMetamask = () => {
   try {
     window.ethereum.enable().then(() => {
       setGlobalVariables();
-
-      window.ethereum.on('accountsChanged', function (accounts) {
+      window.ethereum.on('networkChanged', function (accounts) {
         // window.location.reload();
         setGlobalVariables();
       });

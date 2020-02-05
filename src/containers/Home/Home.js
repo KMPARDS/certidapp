@@ -1,39 +1,33 @@
 import React, { Component } from 'react';
-import { network, certificateContract, networkId } from '../../env';
-
-const METAMASK_ENUM = {
-  NOT_INSTALLED: 0,
-  INSTALLED_BUT_NOT_CONNECTED: 1,
-  CONNECTED: 2,
-  OTHER_NETWORK: 3
-};
+import MetamaskNetworkError from '../MetamaskNetworkError/MetamaskNetworkError';
+import { network, certificateContract, networkId, METAMASK_ENUM } from '../../env';
 
 export default class extends Component {
-  state = {
-    metamaskStatus: METAMASK_ENUM.NOT_INSTALLED
-  };
+  // state = {
+  //   metamaskStatus: METAMASK_ENUM.NOT_INSTALLED
+  // };
 
   componentDidMount = () => {
-    this.intervalId = setInterval(() => {
-      let latestStatus = METAMASK_ENUM.NOT_INSTALLED;
-      if(window.ethereum) {
-        latestStatus = METAMASK_ENUM.INSTALLED_BUT_NOT_CONNECTED;
-      }
-      if(window.signer) {
-        latestStatus = METAMASK_ENUM.CONNECTED;
-      }
-      if(window.signer && window.web3.currentProvider.networkVersion != networkId) {
-        latestStatus = METAMASK_ENUM.OTHER_NETWORK;
-      }
-      if(this.state.metamaskStatus !== latestStatus) {
-        this.setState({ metamaskStatus: latestStatus });
-      }
-    }, 300);
+    // this.intervalId = setInterval(() => {
+    //   let latestStatus = METAMASK_ENUM.NOT_INSTALLED;
+    //   if(window.ethereum) {
+    //     latestStatus = METAMASK_ENUM.INSTALLED_BUT_NOT_CONNECTED;
+    //   }
+    //   if(window.signer) {
+    //     latestStatus = METAMASK_ENUM.CONNECTED;
+    //   }
+    //   if(window.signer && window.web3.currentProvider.networkVersion != networkId) {
+    //     latestStatus = METAMASK_ENUM.OTHER_NETWORK;
+    //   }
+    //   if(this.state.metamaskStatus !== latestStatus) {
+    //     this.setState({ metamaskStatus: latestStatus });
+    //   }
+    // }, 300);
   };
 
-  componentWillUnmount = () => {
-    clearInterval(this.intervalId);
-  }
+  // componentWillUnmount = () => {
+  //   clearInterval(this.intervalId);
+  // }
 
   render = () => (
     <>
@@ -41,26 +35,10 @@ export default class extends Component {
         <h1>Welcome to CertiÐApp</h1>
         <p>CertiÐApp is an Ethereum Blockchain powered Certificate Issuance and Verification Smart Contract.</p>
         <div style={{padding:'0 10%'}}>
-        {(() => {
-          switch(this.state.metamaskStatus) {
-            case METAMASK_ENUM.NOT_INSTALLED:
-              return (
-                <p className="error-message">You will need <a className="link" href="https://metamask.io/" rel="noopenner noreferrer" target="_blank">Metamask</a> installed if you want to register your certificate.</p>
-              );
-            case METAMASK_ENUM.INSTALLED_BUT_NOT_CONNECTED:
-              return (
-                <p className="error-message">Seems you have Metamask installed, please select Connect in Metamask. If it was previously cancelled, then please refresh the page.</p>
-              );
-            case METAMASK_ENUM.CONNECTED:
-              return (
-                <p className="success-message">Metamask is connected! Please select a tab from above.</p>
-              );
-            case METAMASK_ENUM.OTHER_NETWORK:
-              return (
-                <p className="error-message">Metamask is connected but the network is different. Please switch to <u>{network}</u> network</p>
-              );
-          }
-        })()}
+          <MetamaskNetworkError
+            updateAllowed={boolean => this.setState({ registrationAllowed: boolean })}
+            showSuccess={true}
+          />
         </div>
       </div>
 

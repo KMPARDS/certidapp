@@ -42,6 +42,12 @@ const env = {
     AUTHORISED: 1,
     MIGRATED: 2,
     SUSPENDED: 3
+  },
+  METAMASK_ENUM: {
+    NOT_INSTALLED: 0,
+    INSTALLED_BUT_NOT_CONNECTED: 1,
+    CONNECTED: 2,
+    OTHER_NETWORK: 3
   }
 };
 

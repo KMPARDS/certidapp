@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Helmet } from "react-helmet";
 import CertificateBox from '../CertificateBox/CertificateBox';
-import { TX_STATUS_ENUM } from '../../env';
+import MetamaskNetworkError from '../MetamaskNetworkError/MetamaskNetworkError';
+import { TX_STATUS_ENUM, network } from '../../env';
 
 export default class extends Component {
   state = {
@@ -11,7 +12,8 @@ export default class extends Component {
     certificateObj: null,
     validCertificate: null,
     txStatus: TX_STATUS_ENUM.NOT_INITIATED,
-    errorMessage: ''
+    errorMessage: '',
+    registrationAllowed: false
   };
 
   timeoutId = null;
@@ -90,17 +92,15 @@ export default class extends Component {
         </>
         : null}
 
-      {this.state.validCertificate
-        ? <>
-
-        </>
-        : <></>}
-
         {this.state.errorMessage ? <p className="error-message">{this.state.errorMessage}</p> : null}
+
+        <MetamaskNetworkError
+          updateAllowed={boolean => this.setState({ registrationAllowed: boolean })}
+        />
 
         <button
           className="btn"
-          disabled={this.state.txStatus !== TX_STATUS_ENUM.NOT_INITIATED || (false && this.state.validCertificate !== (this.state.certificateObj && this.state.certificateObj.signatures && this.state.certificateObj.signatures.length))}
+          disabled={this.state.txStatus !== TX_STATUS_ENUM.NOT_INITIATED || !this.state.registrationAllowed}
           onClick={this.onRegister}
         >
           {(() => {
