@@ -28,7 +28,7 @@ export default class extends Component {
       caObj = { name: null, website: null };
     }
 
-    this.setState({
+    await this.setState({
       name: caObj.name,
       website: caObj.website ? window._z.toWebsiteURL(caObj.website) : null,
       status: certifyingAuthority.status,
@@ -44,6 +44,8 @@ export default class extends Component {
     if(certifyingAuthority.status === AUTHORITY_STATUS_ENUM.AUTHORISED) {
       this.props.validCertificate[1]((this.props.validCertificate[0] || 0)+1);
     }
+
+    this.props.updateStatus(certifyingAuthority.status);
   };
 
   render = () => {
@@ -80,6 +82,7 @@ export default class extends Component {
             </div>
           </div>
         </div> : signerElement}
+        {this.state.status === AUTHORITY_STATUS_ENUM.NOT_AUTHORISED ? <p>This signature is in RED because this signer address is not KYC verified. To make it GREEN, signer has to complete their KYC.</p> : null}
       </div>
     );
   }
