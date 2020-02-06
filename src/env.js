@@ -1,7 +1,10 @@
 const certificateStorageJSON = require('./compiledContracts/CertiDApp_CertiDApp.json');
 
 const env = {
-  network: 'kovan',
+  network:
+    // 'kovan'
+    'homestead'
+  ,
   certificateContract: {
     address: '0x3ea996e3A2f2A8b235065a7Fa5d55e5f626f0003',
     abi: certificateStorageJSON.abi
@@ -50,6 +53,10 @@ const env = {
     OTHER_NETWORK: 3
   }
 };
+
+if(env.network === 'homestead') {
+  env.certificateContract.address = '0x42270341CDca6eE703F98529c3F0C538F5369C2a';
+}
 
 switch (env.network) {
   case 'homestead':
