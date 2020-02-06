@@ -159,6 +159,23 @@ export default class extends Component {
     let keys = ['hex', ...certOrder];
     const certificatesToSign = output.split('\r').join('').split('\t').join('').split('\n').map((row, i) => {
       const columns = row.split(',');
+
+      let concatStartIndex = null;
+      for(const columnIndex in columns) {
+        if(concatStartIndex === null && columns[columnIndex][0] === '"') {
+          concatStartIndex = +columnIndex;
+        }
+
+        if(concatStartIndex !== null && columns[columnIndex][columns[columnIndex].length - 1] === '"') {
+          columns[concatStartIndex] = columns[concatStartIndex].slice(1);
+          columns[columnIndex] = columns[columnIndex].slice(0,columns[concatStartIndex].length);
+          const deletedColumns = columns.splice(concatStartIndex+1, columnIndex - concatStartIndex);
+          columns[concatStartIndex] = columns[concatStartIndex]+deletedColumns.join('');
+          concatStartIndex = null;
+        }
+
+      }
+
       if(i === 0 && columns[0] === 'hex') {
         keys = columns;
         return;
