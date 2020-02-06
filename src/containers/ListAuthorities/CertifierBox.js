@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import { AUTHORITY_STATUS_ENUM } from '../../env';
 
 export default class extends Component {
   state = {
     obj: null,
-    isAuthorised: null
+    status: null
   };
 
   componentDidMount = async() => {
@@ -11,10 +12,10 @@ export default class extends Component {
       const certifyingAuthority = await window.certificateContractInstance.functions.certifyingAuthorities(this.props.address);
       // console.log(certifyingAuthority);
       const obj = window._z.decodeCertifyingAuthority(certifyingAuthority.data);
-      this.setState({ obj, isAuthorised: certifyingAuthority.isAuthorised });
+      this.setState({ obj, status: certifyingAuthority.status });
     } catch (error) {
       console.error(error);
-      this.setState({ name: 'Failed to load name...' });
+      this.setState({ name: 'Failed to load details...' });
     }
   }
 
@@ -27,8 +28,19 @@ export default class extends Component {
         ))}
       </> : <>Loading...</>}
       <p>Signing Address: {this.props.address}</p>
-      <p>Is Authorized: {this.state.isAuthorised === null ? 'Loading...' : (
-        this.state.isAuthorised ? 'Yes' : 'No'
+      <p>Status: {this.state.status === null ? 'Loading...' : (
+        (() => {
+          switch(this.state.status) {
+            case AUTHORITY_STATUS_ENUM.AUTHORISED:
+              return <>Authorised</>;
+            case AUTHORITY_STATUS_ENUM.MIGRATED:
+              return <>Migrated</>;
+            case AUTHORITY_STATUS_ENUM.SUSPENDED:
+              return <>Suspended</>;
+            default:
+              return <>Not Authorised</>;
+          }
+        })()
       )}</p>
       </>
     );
