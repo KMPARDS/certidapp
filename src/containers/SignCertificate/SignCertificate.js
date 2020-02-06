@@ -438,6 +438,9 @@ export default class extends Component {
       screen = (
         <>
         {header}
+
+        <p className="status-message">Create a CSV file with columns: hex, name, subject, score, category, date, date2, location. The column headings should be in small alphabets or you can download sample CSV from <a className="link" href="download/test_certificates.csv">here</a>.</p>
+
           {this.state.certificatesToSign.length === 0
             ? <>
           <button className="btn" onClick={() => document.getElementById('csv-input').click()}>Select CSV file</button>
