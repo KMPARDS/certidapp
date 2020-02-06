@@ -67,7 +67,15 @@ export function bytify(input, type) {
       return '0x'+bs58.decode(input).toString('hex');
     case 'date':
       if(typeof input === 'string') {
-        input = input.split('/').join('');
+        const ensureDateCharLen = dateStrArray => {
+          if(dateStrArray.length === 1) return dateStrArray;
+          if(dateStrArray[0].length < 2) dateStrArray[0] = '0'+dateStrArray[0];
+          if(dateStrArray[1].length < 2) dateStrArray[1] = '0'+dateStrArray[1];
+          if(dateStrArray[2].length === 2) dateStrArray[2] = '20'+dateStrArray[2];
+          return dateStrArray;
+        }
+        input = ensureDateCharLen(input.split('/')).join('');
+        input = ensureDateCharLen(input.split('-')).join('');
         if(isNaN(Number(input))) throw new Error(`Invalid Date Content (${input})`);
         if(String(input).length !== 8) throw new Error(`Date should have 8 digits (${input}) (length: ${String(input).length})`);
         if(String(input).split('.').length > 1) throw new Error(`Date should have no decimal point (${input})`);
