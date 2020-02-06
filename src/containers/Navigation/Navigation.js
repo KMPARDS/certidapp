@@ -22,6 +22,11 @@ export default class extends Component {
       return false;
     }
 
+    const navigationGroup = document.querySelector('.navigation-group');
+    if(navigationGroup.offsetHeight > 56) {
+      this.setState({ showAllItems: false });
+    }
+
     const intervalId = setInterval(async() => {
       if(await setManager()) {
         // console.log('setManager cleared');
@@ -31,12 +36,11 @@ export default class extends Component {
 
     const intervalId2 = setInterval(() => {
       try {
-        const navigationGroup = document.querySelector('.navigation-group');
         if(navigationGroup) {
           if(navigationGroup.offsetHeight > 56) {
-            this.setState({ displayHideButton: true });
+            if(!this.state.displayHideButton) this.setState({ displayHideButton: true });
           } else {
-            this.setState({ displayHideButton: !this.state.showAllItems });
+            if(this.state.displayHideButton === this.state.showAllItems) this.setState({ displayHideButton: !this.state.showAllItems });
           }
         }
 
