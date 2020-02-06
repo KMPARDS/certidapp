@@ -52,7 +52,7 @@ body {
   width:80vw;
   max-width: 1024px;
   margin: 100px 0;
-  overflow: scroll;
+  overflow: hidden;
 }
 
 .home-details {
