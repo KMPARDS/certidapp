@@ -18,20 +18,34 @@ export default class extends Component {
     showAllSigners: false
   };
 
+  intervalId = null;
+  previousPropsCertObj = this.props.certificateObj;
+
   componentDidMount = async() => {
-    setTimeout(() => {
-      console.log(this.state.certificateObj);
-    }, 5000);
-    setInterval(() => {
+    this.intervalId = setInterval(() => {
       if(this.props.validCertificate && this.state.validCertificate !== this.props.validCertificate[0]) {
         this.setState({ validCertificate: this.props.validCertificate[0] });
       }
+      if(this.previousPropsCertObj !== this.props.certificateObj) {
+        this.setState({
+          certificateObj: {
+            ...this.props.certificateObj,
+            signerStatusArray: new Array(this.props.certificateObj.signatures.length).fill(null)
+          }
+        });
+        this.previousPropsCertObj = this.props.certificateObj;
+      }
     }, 100);
+    
     if(this.props.qrDisplay) QRCode.toCanvas(document.getElementById('qrcode-canvas'), window.location.href);
 
     const certificate = await window.certificateContractInstance.certificates(this.state.certificateObj.certificateHash);
 
     this.setState({ isAlreadyRegistered: certificate.signers !== '0x' });
+  };
+
+  componentWillUnmount = () => {
+    clearInterval(this.intervalId);
   }
 
   render = () => {
