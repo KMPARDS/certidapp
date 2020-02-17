@@ -62,7 +62,7 @@ export default class extends Component {
         Select Year:
         <select onChange={event => this.updateState({ year: event.target.value })}>
           <option selected disabled value={null}>Select Year</option>
-          {Array.from(Array(50).keys()).map(key => key+1951).map(year => (
+          {Array.from(Array(new Date().getFullYear() - 1950).keys()).map(key => key+1951).map(year => (
             <option value={year}>{year}</option>
           ))}
         </select>
